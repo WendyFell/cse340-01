@@ -5,14 +5,63 @@
   box-sizing: border-box;
 }
 
+/******* General Styling ****************/
+:root {
+  /* fonts */
+  --font-head: Poppins, sans-serif;
+  --font-body: "Noto Serif Hebrew", serif;
+  /* colors */
+  --primary-color: #92B4A7;
+  --secondary-color: #93827F;
+  --tertiary-color: #54786A;
+  --dark-color: #2F2F2F;
+   /* sizes */
+  --small-font: 0.8em;
+  --large-font: 2em;  
+}
 
+#wrapper {
+  background-color: white;
+}
 
+a {
+  text-decoration: none;
+  color: var(--dark-color);
+}
 
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-head);
+}
 
+.siteName {
+  font-size: var(--large-font);
+}
+ 
+/* *****Navigation***** */
+nav {
+  background-color: var(--dark-color);
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  font-family: var(--font-head);
+  color: white;
+}
 
+/* *****Body sections****** */
+.hero, .reviews, .upgrades {
+  font-family: var(--font-body);
+}
 
-
-
+/* *****Reviews******* */
+.review-list {
+  font-size: .8rem;
+  font-family: var(--font-head);
+}
 
 @media only screen and (min-width: 550px) {
   body {
