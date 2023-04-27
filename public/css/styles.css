@@ -11,15 +11,15 @@
   --font-head: Poppins, sans-serif;
   --font-body: "Noto Serif Hebrew", serif;
   /* colors */
-  --primary-color: #92B4A7;
-  --secondary-color: #93827F;
-  --tertiary-color: #54786A;
-  --dark-color: #2F2F2F;
+  --primary-color: #1d8890; /* #07A0C3 #4E9BA6 */
+  --secondary-color: #F6AE2D; /* #F0C808 */
+  --tertiary-color: #9D1B23; /* #DD1C1A  */
+  --dark-color: #11151C;
    /* sizes */
   --small-font: 0.8em;
   --large-font: 2em;  
 }
-
+ 
 #wrapper {
   background-color: white;
 }
@@ -57,11 +57,74 @@ nav ul {
   font-family: var(--font-body);
 }
 
+/* *****Hero****** */
+
+
+.hero-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.hero-box-list {
+  list-style-type: none;
+  color: var(--primary-color);
+  background-color: rgba(255, 255, 255, 0.797);
+  padding: 5px;
+  grid-column: 1/5;
+  grid-row: 1;
+  width: fit-content;
+  font-weight: bold;
+ 
+}
+.list-item {
+  font-size: var(--small-font);
+}
+.list-item:nth-child(1) {
+  font-size: 1.3rem;
+}
+.hero-btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 5px;  
+  font-weight: bold;
+}
+
+.hero-img {
+  width: 100%;
+  grid-column: 2/6;
+  grid-row: 1;
+  
+}
+
 /* *****Reviews******* */
 .review-list {
   font-size: .8rem;
   font-family: var(--font-head);
 }
+
+
+/* *****Upgrades***** */
+.grid-upgrade {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 10px;  
+  place-items: center;
+  outline: 1px solid green;
+}
+.box-upgrade {
+  background-color: var(--primary-color);
+  padding: 10px;
+  margin: 10px;
+  outline: 1px solid red;
+}
+.wrapper-upgrade {
+  outline: 1px solid blue;
+  
+}
+
+
+
+
 
 @media only screen and (min-width: 550px) {
   body {
