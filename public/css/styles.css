@@ -58,42 +58,40 @@ nav ul {
 }
 
 /* *****Hero****** */
-
-
 .hero-box {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;  
 }
-
 .hero-box-list {
   list-style-type: none;
   color: var(--primary-color);
   background-color: rgba(255, 255, 255, 0.797);
   padding: 5px;
+  margin: 0;
   grid-column: 1/5;
   grid-row: 1;
+  justify-self: start;
   width: fit-content;
-  font-weight: bold;
- 
-}
-.list-item {
-  font-size: var(--small-font);
+  height: fit-content;
+  font-weight: bold; 
 }
 .list-item:nth-child(1) {
   font-size: 1.3rem;
 }
+.list-item:nth-child(n + 2) {
+  font-family: var(--font-head);
+  font-size: var(--small-font);
+}
 .hero-btn {
   background-color: var(--primary-color);
   color: white;
-  padding: 5px;  
+  padding: 8px;  
   font-weight: bold;
 }
-
 .hero-img {
   width: 100%;
   grid-column: 2/6;
   grid-row: 1;
-  
 }
 
 /* *****Reviews******* */
@@ -130,6 +128,10 @@ nav ul {
   body {
     background-image: url("/images/site/checkerboard.jpg");
   }
+  #wrapper {
+    width: 800px;
+  }
+
 }
 
 
