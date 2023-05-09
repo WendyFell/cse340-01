@@ -1,3 +1,4 @@
+-- Add Tony Stark
 INSERT INTO public.account (
 	account_firstname,
 	account_lastname,
@@ -10,18 +11,18 @@ VALUES (
 	'tony@starknet.com',
 	'Iam1ronM@n'
 );
-
+-- Change Tony Stark to Admin status
 UPDATE account
 SET account_type = "Admin"
 WHERE account_id = 1;
-
+-- Delete Tony Stark
 DELETE FROM account
 WHERE account_id = 1;
-
+-- Change part of the description
 UPDATE inventory
 SET inv_description = REPLACE(inv_description, 'the small interiors', 'a huge interior')
 WHERE inv_id =10;
-
+-- See a table of just the Sport vehicles with the make and model only
 SELECT 
 	classification_name,
 	inv_make,
