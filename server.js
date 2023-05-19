@@ -22,11 +22,12 @@ app.set("layout", "./layouts/layout") // folder structure implemented, so not fo
  * Routes
  *************************/
 app.use(require("./routes/static"))
+
 // Index route
-// app.get("/", function(req, res) {
-  // res.render("index", {title: "Home"})
-// })
 app.get("/", baseController.buildHome)
+
+// Inventory routes
+app.use("/inv", require("./routes/inventoryRoute"))
 
 /* ***********************
  * Local Server Information

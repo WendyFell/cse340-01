@@ -29,10 +29,11 @@ body {
 #wrapper {
   background-color: white;
 }
-h2 {
-  margin: 5px;
+h1 {
+  font-family: var(--font-head);
 }
-a {
+
+#tools a, .siteName a{
   text-decoration: none;
   color: var(--dark-color);
 }
@@ -59,7 +60,16 @@ nav ul {
   font-family: var(--font-head);
   color: white;
 }
+ nav ul li a {
+  text-decoration: none;
+  color: white;
+ }
 
+ nav ul li a:hover { 
+  background-color: var(--secondary-color);
+  color: var(--dark-color);
+ }
+ 
 /* *****Body sections****** */
 .hero, .reviews, .upgrades {
   font-family: var(--font-body);
@@ -103,6 +113,8 @@ nav ul {
   grid-row: 1;
 }
 
+
+
 /* *****Reviews******* */
 .review-list {
   font-size: .8rem;
@@ -134,6 +146,28 @@ nav ul {
   text-decoration: underline;
   text-underline-position: under;
 }
+
+/* Inventory Items Display */
+#inv-display li {
+  outline: 1px solid purple;
+}
+#inv-display li a {
+  text-decoration: none;
+  color: var(--tertiary-color);
+  outline: 1px solid teal;
+  font-family: var(--font-body);
+  margin: 5px;
+}
+
+.namePrice span{
+  outline: 1px solid yellowgreen;
+}
+
+/* h2 {
+  font-family: var(--font-body);
+  margin: 5px;
+} */
+
 
 /* ******************************************* */
 /* ************** Large Screen *************** */
@@ -195,6 +229,12 @@ nav ul {
   .review-list {
     font-size: 1rem;
     line-height: 2.5rem;
+  }
+
+  /* inventory display */
+  #inv-display {
+    list-style: none;
+    display: grid;
   }
 }
 
