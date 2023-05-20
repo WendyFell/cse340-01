@@ -69,7 +69,7 @@ nav ul {
   background-color: var(--secondary-color);
   color: var(--dark-color);
  }
- 
+
 /* *****Body sections****** */
 .hero, .reviews, .upgrades {
   font-family: var(--font-body);
@@ -147,8 +147,10 @@ nav ul {
   text-underline-position: under;
 }
 
-/* Inventory Items Display */
+/* *****Inventory Items Display***** */
 #inv-display li {
+  padding: 2px;
+  margin: 2px;
   outline: 1px solid purple;
 }
 #inv-display li a {
@@ -163,6 +165,8 @@ nav ul {
   outline: 1px solid yellowgreen;
 }
 
+
+
 /* h2 {
   font-family: var(--font-body);
   margin: 5px;
@@ -174,16 +178,17 @@ nav ul {
 /* ******************************************* */
 @media only screen and (min-width: 550px) {
   body {
-    background-image: url("/images/site/small_check.jpg");    
+    background-image: url("/images/site/small_check.jpg")repeat;    
+    background-size: 30%;
   }
   
   #wrapper {
-    width: 800px;
+    width: 100%;
     padding: 10px;
     outline: 5px solid var(--primary-color);
     margin-top: 10px;
   }
-  main {
+  /* main {
     display: grid;    
     grid-template-columns: 1fr 1fr;
   }
@@ -198,7 +203,7 @@ nav ul {
   .upgrades {
     grid-column: 1/2;
     grid-row: 2/3;
-  }
+  } */
 
   .hero-box {    
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;  
@@ -235,7 +240,32 @@ nav ul {
   #inv-display {
     list-style: none;
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	  align-items: center;
+    outline: 2px solid red;
   }
+  /* .dirGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	align-items: center;
+}
+
+.dirList {
+	display: flex;
+	flex-direction: column;
+}
+
+.dirGrid section {
+	flex-direction: column;
+	text-align: center;
+    padding: 5px;
+    background-color: #E2FBF7;
+}
+
+.dirGrid section > * {
+	margin: 0.1rem;
+    
+} */
 }
 
 
