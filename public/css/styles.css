@@ -165,6 +165,8 @@ hr {
   outline: 1px solid purple;
   align-items: center;
   justify-content: center;
+  align-self: stretch;
+  grid-gap: 5px;
 }
 
 #inv-display li a {
@@ -176,13 +178,19 @@ hr {
 }
 
 #inv-display li a img{
-  width: 90%;
-  height: auto;
+  width: 200px;
+  height: 100px;
+  object-fit: contain;
+  
+ 
 }
 
 
 .namePrice span{
   outline: 1px solid yellowgreen;
+}
+.namePrice {
+  text-align: center;
 }
 
 
@@ -260,32 +268,11 @@ hr {
   #inv-display {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	  align-items: center;
     outline: 2px solid red;
   }
-  /* .dirGrid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	align-items: center;
+  
+
+
 }
-
-.dirList {
-	display: flex;
-	flex-direction: column;
-}
-
-.dirGrid section {
-	flex-direction: column;
-	text-align: center;
-    padding: 5px;
-    background-color: #E2FBF7;
-}
-
-.dirGrid section > * {
-	margin: 0.1rem;
-    
-} */
-}
-
-
