@@ -25,7 +25,6 @@ Util.getNav = async function (req, res, next) {
 }
 
 
-
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
@@ -58,6 +57,42 @@ Util.buildClassificationGrid = async function(data){
   }
   return grid
 }
+
+// /* **************************************
+//  * Custom function that gets the vehicle information and wraps it up in HTML 
+//  * Unit 3 assignment 1.2.4
+//  * ************************************ */
+Util.buildInventoryViewGrid = async function(data1){
+  let grid1
+  if(data1.length > 0){
+    grid1 = '<ul id="inv-item-display">'
+    data1.forEach(vehicle => { 
+      grid1 += '<li>'
+      grid1 +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
+      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
+      + 'details"><img src="' + vehicle.inv_image 
+      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
+      +' on CSE Motors" /></a>'
+      grid1 += '<div class="namePrice">'
+      grid1 += '<span>' + vehicle.inv_year + '</span>'
+      grid1 += '<h2>'
+      grid1 += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
+      grid1 += '</h2>'
+      grid1 += '<span>$' 
+      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
+      grid1 += '<span>' + vehicle.inv_miles + '</span>'
+      grid1 += '</div>'
+      grid1 += '</li>'
+    })
+    grid1 += '</ul>'
+  } else { 
+    grid1 += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return grid1
+}
+
 
 /* ****************************************
  * Middleware For Handling Errors
