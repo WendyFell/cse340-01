@@ -148,7 +148,7 @@ nav ul {
   text-underline-position: under;
 }
 
-/* *****Inventory Items Display***** */
+/* *****Inventory Display***** */
 ul {
   padding: 5px;
 }
@@ -178,11 +178,8 @@ hr {
 }
 
 #inv-display li a img {
-  display: block;
-  width: 200px;
-  height: 100px;
-  object-fit: contain;
-  align-items: center;
+  width: 100%;
+  
 }
 
 .namePrice span{
@@ -191,6 +188,25 @@ hr {
 .namePrice {
   text-align: center;
 }
+
+/* Vehicle Display */
+#inv-item-display {
+  outline: 5px solid green;
+  list-style-type: none;
+ 
+  font-family: var(--font-body);
+}
+
+.itemInfo {
+  display: grid;
+  padding: 10px;
+}
+.makeModel {
+  text-align: center;
+}
+
+
+
 
 
 /* ******************************************* */
@@ -265,6 +281,23 @@ hr {
     outline: 2px solid red;
   }
   
+  /* Vehicle Display */
+  #inv-item-display {
+    outline: 1px solid green;
+    list-style-type: none;
+    display: flex;
+    font-family: var(--font-body);
+  }
+
+  .itemInfo {
+    display: grid;
+    padding: 10px;
+  }
+  .makeModel {
+    text-align: center;
+  }
+
+
 
 
 }

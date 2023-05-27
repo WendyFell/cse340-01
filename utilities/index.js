@@ -34,7 +34,7 @@ Util.buildClassificationGrid = async function(data){
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => { 
       grid += '<li>'
-      grid +=  '<a href="/inv/detail/'+ vehicle.inv_id 
+      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id  
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
       + ' details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
@@ -42,7 +42,7 @@ Util.buildClassificationGrid = async function(data){
       grid += '<div class="namePrice">'
       grid += '<hr />'
       grid += '<h2>'
-      grid += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
+      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
       grid += '</h2>'
@@ -67,25 +67,22 @@ Util.buildVehicleView = async function(data1){
   if(data1.length > 0){
     vehicleView = '<ul id="inv-item-display">'
     data1.forEach(vehicle => { 
-      vehicleView += '<li>'
-      vehicleView +=  '<a href="/inv/detail/'+ vehicle.inv_id 
-      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_image 
-      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
-      vehicleView += '<div class="itemInfo">'
-      
-      vehicleView += '<h2>'
-      vehicleView += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
+      vehicleView += '<li>'      
+      vehicleView +=   '<div class="vehicleImage">' + '<img src=' + vehicle.inv_image 
+      +' alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
+      +' on CSE Motors">' + '</div>'
+
+      vehicleView += '<div class="itemInfo">'   
+      vehicleView += '<h2 class="makeModel">'
+      vehicleView +=  vehicle.inv_make + ' ' + vehicle.inv_model + 'Description'
       vehicleView += '</h2>'
-      vehicleView += '<span>' + vehicle.inv_year + '</span>'
-      vehicleView += '<span>$' 
+      vehicleView += '<span class="year">Year: ' + vehicle.inv_year + '</span>'
+      vehicleView += '<span class="price"> Price: $' 
       + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
-      vehicleView += '<span>' + vehicle.inv_miles + '</span>'
+      vehicleView += '<span class="mileage">Mileage: ' + new Intl.NumberFormat().format(vehicle.inv_miles) + '</span>'
+      vehicleView += '<span class="description">Description:' + vehicle.inv_description + '</span>'
       vehicleView += '</div>'
-      vehicleView += '</li>'
+      vehicleView += '<li>'
     })
     vehicleView += '</ul>'
   } else { 
