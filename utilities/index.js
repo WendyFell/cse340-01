@@ -34,7 +34,7 @@ Util.buildClassificationGrid = async function(data){
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => { 
       grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
+      grid +=  '<a href="/inv/detail/'+ vehicle.inv_id 
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
       + ' details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
@@ -42,7 +42,7 @@ Util.buildClassificationGrid = async function(data){
       grid += '<div class="namePrice">'
       grid += '<hr />'
       grid += '<h2>'
-      grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
+      grid += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
       grid += '</h2>'
@@ -62,37 +62,37 @@ Util.buildClassificationGrid = async function(data){
 //  * Custom function that gets the vehicle information and wraps it up in HTML 
 //  * Unit 3 assignment 1.2.4
 //  * ************************************ */
-// Util.buildInventoryViewGrid = async function(data1){
-//   let grid1
-//   if(data1.length > 0){
-//     grid1 = '<ul id="inv-item-display">'
-//     data1.forEach(vehicle => { 
-//       grid1 += '<li>'
-//       grid1 +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
-//       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-//       + 'details"><img src="' + vehicle.inv_image 
-//       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-//       +' on CSE Motors" /></a>'
-//       grid1 += '<div class="itemInfo">'
+Util.buildVehicleView = async function(data1){
+  let vehicleView
+  if(data1.length > 0){
+    vehicleView = '<ul id="inv-item-display">'
+    data1.forEach(vehicle => { 
+      vehicleView += '<li>'
+      vehicleView +=  '<a href="/inv/detail/'+ vehicle.inv_id 
+      + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
+      + 'details"><img src="' + vehicle.inv_image 
+      +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
+      +' on CSE Motors" /></a>'
+      vehicleView += '<div class="itemInfo">'
       
-//       grid1 += '<h2>'
-//       grid1 += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
-//       + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
-//       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
-//       grid1 += '</h2>'
-//       grid1 += '<span>' + vehicle.inv_year + '</span>'
-//       grid1 += '<span>$' 
-//       + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
-//       grid1 += '<span>' + vehicle.inv_miles + '</span>'
-//       grid1 += '</div>'
-//       grid1 += '</li>'
-//     })
-//     grid1 += '</ul>'
-//   } else { 
-//     grid1 += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
-//   }
-//   return grid1
-// }
+      vehicleView += '<h2>'
+      vehicleView += '<a href="/inv/detail/' + vehicle.inv_id +'" title="View ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
+      vehicleView += '</h2>'
+      vehicleView += '<span>' + vehicle.inv_year + '</span>'
+      vehicleView += '<span>$' 
+      + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
+      vehicleView += '<span>' + vehicle.inv_miles + '</span>'
+      vehicleView += '</div>'
+      vehicleView += '</li>'
+    })
+    vehicleView += '</ul>'
+  } else { 
+    vehicleView += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return vehicleView
+}
 
 
 /* ****************************************

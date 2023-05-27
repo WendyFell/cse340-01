@@ -177,14 +177,13 @@ hr {
   margin: 5px;
 }
 
-#inv-display li a img{
+#inv-display li a img {
+  display: block;
   width: 200px;
   height: 100px;
   object-fit: contain;
-  
- 
+  align-items: center;
 }
-
 
 .namePrice span{
   outline: 1px solid yellowgreen;
@@ -192,13 +191,6 @@ hr {
 .namePrice {
   text-align: center;
 }
-
-
-
-/* h2 {
-  font-family: var(--font-body);
-  margin: 5px;
-} */
 
 
 /* ******************************************* */
