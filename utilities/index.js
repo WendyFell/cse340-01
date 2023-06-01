@@ -1,3 +1,4 @@
+/* Unit 3 MVC implementation activity */
 const invModel = require("../models/inventory-model")
 const Util = {}
 
@@ -74,15 +75,15 @@ Util.buildVehicleView = async function(data1){
 
       vehicleView += '<div class="itemInfo">'   
       vehicleView += '<h2 class="makeModel">'
-      vehicleView +=  vehicle.inv_make + ' ' + vehicle.inv_model + 'Description'
+      vehicleView +=  vehicle.inv_make + ' ' + vehicle.inv_model + ' Description'
       vehicleView += '</h2>'
       vehicleView += '<span class="year">Year: ' + vehicle.inv_year + '</span>'
       vehicleView += '<span class="price"> Price: $' 
       + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</span>'
       vehicleView += '<span class="mileage">Mileage: ' + new Intl.NumberFormat().format(vehicle.inv_miles) + '</span>'
-      vehicleView += '<span class="description">Description:' + vehicle.inv_description + '</span>'
+      vehicleView += '<span class="description"> Description: ' + vehicle.inv_description + '</span>'
       vehicleView += '</div>'
-      vehicleView += '<li>'
+      vehicleView += '</li>'
     })
     vehicleView += '</ul>'
   } else { 

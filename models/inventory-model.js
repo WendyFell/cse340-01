@@ -1,3 +1,4 @@
+/* Unit 3 MVC Implementation activity */
 const pool = require("../database/")
 
 /* ***************************

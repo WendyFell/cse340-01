@@ -9,8 +9,36 @@ const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
 const env = require("dotenv").config()
 const app = express()
-const baseController = require("./controllers/baseController")
+const baseController = require("./controllers/baseController") /* Unit 3 MVC implementation activity */
 const utilities = require("./utilities/")
+const session = require ("express-session")
+const pool = require("./database/")
+const bodyParser = require("body-parser")
+
+/* ***********************
+ * Middleware
+ * ************************/
+app.use(session({ //(Activity unit 4-Sessions and Messages)
+  store: new (require('connect-pg-simple')(session))({ 
+    createTableIfMissing: true, 
+    pool, 
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true, 
+  saveUninitialized: true, 
+  name: 'sessionId', 
+}))
+
+// Express Messages Middleware (Activity unit 4-Sessions and Messages)
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res) 
+  next()
+})
+
+// unit 4 process registration activity, makes the body-parser available
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 /* ***********************
  * View Engine and Templates
@@ -23,10 +51,18 @@ app.set("layout", "./layouts/layout") // folder structure implemented, so not fo
  * Routes
  *************************/
 app.use(require("./routes/static"))
+
 // Index route
-app.get("/", utilities.handleErrors(baseController.buildHome))
+/* Unit 3 MVC implementation activity */
+/* app.get("/", baseController.buildHome) */
+app.get("/", utilities.handleErrors(baseController.buildHome)) 
+
 // Inventory routes
 app.use("/inv", require("./routes/inventoryRoute"))
+app.use("/account", require("./routes/accountRoute")) /* unit 4 deliver login activity will also deliver register */
+
+// error link
+app.get("/error", utilities.handleErrors(baseController.errorFunc))
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

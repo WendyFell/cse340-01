@@ -1,3 +1,4 @@
+/* Unit 3 MVC implementation activity */
 const { Pool } = require("pg")
 require("dotenv").config()
 /* ***************

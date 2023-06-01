@@ -1,0 +1,36 @@
+<div class="form">
+    <% if (title) { %>
+        <h1><%= title %></h1>
+        <% } else {
+        res.redirect('/')
+        } %>
+    <%- messages() %>
+    <form class="loginForm" id="registerForm" action="/account/register" method="post">
+        <div >
+            <p>All fields must be filled out.</p>
+            <!-- <label for="account_firstname">Email</label> -->
+            <input type="text" id="account_firstname" placeholder="Enter First Name" name="account_firstname" required>
+
+            <!-- <label for="account_lastname">Password</label> -->
+            <input type="text" id="account_lastname" placeholder="Enter Last Name" name="account_lastname"  minlength="8" required>
+            
+            <!-- <label for="account_email">Email</label> -->
+            <input type="email" id="account_email" placeholder="Enter Email" name="account_email" required>
+
+            <!-- <label for="account_password">Password</label> -->
+            <input type="password" id="account_password" placeholder="Enter Password" name="account_password"  minlength="8" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+        
+            <p class="infoPassword">Password must be at least 12 characters, contain at least 1 capital letter, 1 number, and 1 special character</p>
+            
+
+            <button id="loginBtn" type="submit">Register</button>
+
+        </div>
+
+        <!-- <div class="container">
+        <span class="psw">Forgot <a href="#">password?</a></span>
+        </div> -->
+    </form>
+    
+</div>
+<script src="/js/script.js"></script>

@@ -34,6 +34,10 @@ h1 {
   font-family: var(--font-head);
 }
 
+p {
+  font-family: var(--font-body);
+}
+
 #tools a, .siteName a{
   text-decoration: none;
   color: var(--dark-color);
@@ -47,6 +51,16 @@ h1 {
 
 .siteName {
   font-size: var(--large-font);
+}
+
+.notice {
+  list-style: none;
+  font-family: var(--font-head);
+  font-size: 2rem;
+  color: var(--secondary-color);
+  background-color: var(--dark-color);
+  border-radius: 15px;
+  text-align: center;
 }
  
 /* *****Navigation***** */
@@ -151,39 +165,43 @@ nav ul {
 /* *****Inventory Display***** */
 ul {
   padding: 5px;
+ 
 }
 hr {
- height: 2px;
- border-width: 0;
- color: var(--dark-color);
- background-color: var(--dark-color);
+  border: 3px solid var(--dark-color);
+  border-radius: 5px;
 }
 #inv-display li {
   list-style-type: none;
   padding: 2px;
-  margin: 2px;
-  outline: 1px solid purple;
+  margin: 20px;
+  outline: 1px solid gray;
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  grid-gap: 5px;
 }
 
 #inv-display li a {
   text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inv-display  li div {
   color: var(--tertiary-color);
-  outline: 1px solid teal;
   font-family: var(--font-body);
-  margin: 5px;
 }
 
 #inv-display li a img {
   width: 100%;
-  
-}
+} 
+#inv-display li h2 {
+  margin: 0;
 
+}  
 .namePrice span{
-  outline: 1px solid yellowgreen;
+  font-family: var(--font-body);
 }
 .namePrice {
   text-align: center;
@@ -205,9 +223,60 @@ hr {
   text-align: center;
 }
 
+/* Login & Register Form */
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  outline: 1px solid var(--dark-color);
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+.form button {
+  text-transform: uppercase;
+  outline: 0;
+  background-color: var(--primary-color);
+  background-image: linear-gradient(45deg,var(--tertiary-color),var(--secondary-color));
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 24px;
+  cursor: pointer;
+}
+.form .sign-up {
+  margin: 15px 0 0;
+  color: var(--dark-color);
+  font-size: 16px;
+}
+.form .sign-up a {
+  color: var(--primary-color);
+  font-weight: bold;
+  text-decoration: none;
+}
 
+input:required:invalid {
+  background-color: white;
+}
+input:focus:invalid {
+  background-color: var(--secondary-color);
+}
 
-
+input:required:valid {
+  background-color: var(--primary-color);
+}
 
 /* ******************************************* */
 /* ************** Large Screen *************** */
@@ -285,12 +354,17 @@ hr {
   #inv-item-display {
     outline: 1px solid green;
     list-style-type: none;
-    display: flex;
+    
     font-family: var(--font-body);
   }
 
-  .itemInfo {
+  #inv-item-display li{
     display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .itemInfo {
+    
     padding: 10px;
   }
   .makeModel {
