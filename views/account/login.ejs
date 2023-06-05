@@ -4,16 +4,28 @@
         <% } else {
         res.redirect('/')
         } %>
+    <% if (errors) { %>
+        <ul class="notice">
+       <% errors.array().forEach(error => { %>
+         <li><%= error.msg %></li>
+      <%  }) %>
+       </ul>
+      <% } %>
     <%- messages() %>
-    <form class="loginForm">
+    <form class="loginForm" id="loginForm" action="/account/login" method="post">
         <div >
-            <!-- <label for="account_email">Email</label> -->
+            <label for="account_email">Email</label>
             <input type="email" id="account_email" placeholder="Enter Email" name="account_email" required>
 
-            <!-- <label for="account_password">Password</label> -->
-            <input type="password" id="account_password" placeholder="Enter Password" name="account_password"  minlength="8" required>
+            <label for="account_password">Password</label>
+            <input type="password" id="account_password" placeholder="Enter Password" name="account_password"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+
+            <p class="infoPassword">Password must be at least 12 characters, contain at least 1 capital letter, 1 number, and 1 special character</p>
+
+            <span id="pswdBtn">Show Password</span>
             
-            <button id="loginBtn" type="submit">Login</button>
+            <!-- <button id="loginBtn" type="submit">Login</button> -->
+            <input type="submit" id="submitBtn" value="login">
 
             <p class="sign-up">No account? <a href="/account/register">Sign-up</a></p>
         </div>
@@ -22,7 +34,6 @@
     <span class="psw">Forgot <a href="">password?</a></span>
     </div> -->
 
-    </form>
-    
+    </form>    
 </div>
-<script src="/js/script.js"></script>
+
