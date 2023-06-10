@@ -57,6 +57,7 @@ invCont.buildAddClassification = async function (req, res, next) {
     res.render("./inventory/add-classification", {
       title: "Enter New Classification",
       nav, 
+      errors: null,
     })
 }
 
@@ -70,6 +71,7 @@ invCont.buildAddInventory = async function (req, res, next) {
       title: "Enter New Inventory",
       nav, 
       options,
+      errors: null,
     })
 }
 
@@ -128,7 +130,7 @@ invCont.addInventory = async function (req, res) {
     res.status(201).render("./inventory/management", {
       title: "Management",
       nav,
-
+      errors: null,
     })
   } else {
     req.flash("notice", "Sorry, the new inventory wasn't entered.")

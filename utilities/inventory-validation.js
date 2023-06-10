@@ -13,8 +13,8 @@ validate.addClassificationRules = () => {
       // classification name is required and must be string
       body("classification_name")
         .trim()
-        .isLength({ min: 3 })
-        .withMessage("Please provide a classification name."), // on error this message is sent.
+        .isLength({ min: 3, max: 16 })
+        .withMessage("Name is too short or too long."), // on error this message is sent.
     ]
 }
 
