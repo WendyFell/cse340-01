@@ -266,6 +266,23 @@ input:required:valid {
   background-color: var(--primary-color);
 }
 
+/* Management View */
+.manageItem {
+  text-decoration: none;
+  color: var(--dark-color);
+  display: flex;
+  flex-direction: row;
+  font-family: var(--font-body);
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 5px;
+  width: 50%;
+  background-color: var(--secondary-color,0.5 );
+  outline: 1px solid var(--dark-color);
+}
+
 /* ******************************************* */
 /* ************** Large Screen *************** */
 /* ******************************************* */

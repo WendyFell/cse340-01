@@ -38,6 +38,110 @@ invCont.buildByInvId = async function (req, res, next) {
   }) 
 }
 
+/* ***************************
+ *  Build the manager view assignment 4 step 1
+ * ************************** */
+invCont.buildManager = async function (req, res, next) {
+  let nav = await utilities.getNav()
+    res.render("./inventory/management", {
+      title: "Management",
+      nav,
+    })
+}
+
+/* ***************************
+ *  Build the add classification view assignment 4 step 2
+ * ************************** */
+invCont.buildAddClassification = async function (req, res, next) {
+  let nav = await utilities.getNav()
+    res.render("./inventory/add-classification", {
+      title: "Enter New Classification",
+      nav, 
+    })
+}
+
+/* ***************************
+ *  Build the add classification view assignment 4 step 2
+ * ************************** */
+invCont.buildAddInventory = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let options = await utilities.getClassificationOpt()
+    res.render("./inventory/add-inventory", {
+      title: "Enter New Inventory",
+      nav, 
+      options,
+    })
+}
+
+/* ***************************
+ *  Process the classification add assignment 4 step 2
+ * ************************** */
+invCont.addClassification = async function (req, res) {
+  const {classification_name} = req.body
+  const classResult = await invModel.newClassification(classification_name)
+  let nav = await utilities.getNav()
+  if (classResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you added ${classification_name}!`
+    )
+    res.status(201).render("./inventory/management", {
+      title: "Management",
+      nav,
+
+    })
+  } else {
+    req.flash("notice", "Sorry, the new classification wasn't entered.")
+    res.status(501).render("./inventory/add-classification", {
+      title: "Enter new classification",
+      nav,
+      errors: null,
+    })
+  }
+}
+
+/* ***************************
+ *  Process the classification add assignment 4 step 2 make model year description image thumbnail mileage color classification-id
+ * ************************** */
+invCont.addInventory = async function (req, res) {
+  let nav = await utilities.getNav()
+  const { inv_make, inv_model,inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color,classification_id } = req.body
+  
+  const invResult = await invModel.newInventory(
+    inv_make, 
+    inv_model,
+    inv_year, 
+    inv_description, 
+    inv_image, 
+    inv_thumbnail, 
+    inv_price, 
+    inv_miles, 
+    inv_color, 
+    classification_id,    
+    )
+  
+  if (invResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you added ${inv_make} ${inv_model}!`
+    )
+    res.status(201).render("./inventory/management", {
+      title: "Management",
+      nav,
+
+    })
+  } else {
+    req.flash("notice", "Sorry, the new inventory wasn't entered.")
+    let options = await utilities.getClassificationOpt()
+    res.status(501).render("./inventory/add-inventory", {
+      title: "Enter new inventory",
+      nav,
+      options,
+      errors: null,
+    })
+  }
+}
+
 invCont.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 module.exports = invCont

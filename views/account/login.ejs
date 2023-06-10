@@ -1,17 +1,20 @@
-<div class="form">
-    <% if (title) { %>
-        <h1><%= title %></h1>
-        <% } else {
-        res.redirect('/')
-        } %>
-    <% if (errors) { %>
-        <ul class="notice">
-       <% errors.array().forEach(error => { %>
-         <li><%= error.msg %></li>
-      <%  }) %>
-       </ul>
-      <% } %>
-    <%- messages() %>
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+    res.redirect('/')
+    } %>
+
+<%- messages() %>    
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<div class="form">    
     <form class="loginForm" id="loginForm" action="/account/login" method="post">
         <div >
             <label for="account_email">Email</label>

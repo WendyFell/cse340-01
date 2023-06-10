@@ -54,7 +54,6 @@ async function registerAccount(req, res) {
     hashedPassword
   )
 
-
   if (regResult) {
     req.flash(
       "notice",

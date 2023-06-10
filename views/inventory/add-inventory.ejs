@@ -1,0 +1,54 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+    res.redirect('/')
+    } %>
+
+<%- messages() %>    
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<div class="form"> 
+  <form class="loginForm" id="registerForm" action="/inv/add-inventory" method="post">
+
+        <p>All fields must be filled out.</p>
+        <label for="inv_make">Make</label>
+        <input type="text" id="inv_make" placeholder="Enter vehicle make" name="inv_make"  value="<%=locals.inv_make %>" required>
+
+        <label for="inv_model">Model</label>
+        <input type="text" id="inv_model" placeholder="Enter vehicle model" name="inv_model"  value="<%=locals.inv_model %>" required>
+        
+        <label for="inv_year">Year</label>
+        <input type="text" id="inv_year" placeholder="Enter vehicle year" name="inv_year"  value="<%=locals.inv_year %>"  required>
+
+        <label for="inv_description">Description</label>
+        <textarea type="text" id="inv_description" placeholder="Enter description" name="inv_description"  value="<%=locals.inv_description %>" required></textarea>
+
+        <label for="inv_image">Image</label>
+        <input type="text" id="inv_image" placeholder="/images/vehicles/no-image.png" name="inv_image"  value="<%=locals.inv_image %>" required>
+
+        <label for="inv_thumbnail">Thumbnail</label>
+        <input type="text" id="inv_thumbnail" placeholder="/images/vehicles/no-image-tn.png" name="inv_thumbnail"  value="<%=locals.inv_thumbnail %>" required>
+        
+        <label for="inv_price">Price</label>
+        <input type="text" id="inv_price" placeholder="Enter price of vehicle, no $" name="inv_price"  value="<%=locals.inv_price %>"  required>
+
+        <label for="inv_miles">Miles</label>
+        <input type="text" id="inv_make" placeholder="Enter mileage, no commas" name="inv_miles"  value="<%=locals.inv_miles %>" required>
+
+        <label for="inv_color">Color</label>
+        <input type="text" id="inv_model" placeholder="Enter vehicle color" name="inv_color"  value="<%=locals.inv_color %>" required>
+        
+        <label for="classification_id">Classification</label>
+       <%- options %>
+        
+        <input type="submit" id="submitBtn" value="register">
+
+    </form>    
+</div>

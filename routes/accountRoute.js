@@ -14,7 +14,7 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 // Functionality to enable the registration route
 router.post(
     "/register", 
-    regValidate.registationRules(),
+    regValidate.registrationRules(),
     regValidate.checkRegData,
     utilities.handleErrors(accountController.registerAccount)
 )
@@ -24,7 +24,6 @@ router.post(
     "/login",
     regValidate.loginRules(),
     regValidate.checkloginData,
-    // utilities.handleErrors(accountController.registerAccount),
     (req, res) => {
       res.status(200).send('login process')
     }

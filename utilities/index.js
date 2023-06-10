@@ -92,6 +92,41 @@ Util.buildVehicleView = async function(data1){
   return vehicleView
 }
 
+// /* **************************************
+//  * Custom function that gets the classification information and puts it in a option  
+//  * Unit 4 assignment 4.3
+//  * ************************************ */
+// Util.classificationIdName = async function(data){
+//   const data1 = await invModel.getInventoryByClassificationId(classification_id)
+//   let classificationName
+//   if(data1.length > 0){
+//     classificationName = '<select name="classification_id">'
+//     '<option value="Select Value"></option>'
+//     data1.forEach(vehicle => { 
+//       classificationName += '<option value= '+ vehicle.classification_id + '>' 
+//       + vehicle.classification_name + '</option>'
+//     })
+//     classificationName += '</select>'
+//   } else { 
+//     classificationName += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+//   }
+//   return classificationName
+// }
+
+Util.getClassificationOpt = async function (req, res, next) {
+  let data = await invModel.getClassifications()
+  let opt = '<select name="classification_id">'
+  
+  data.rows.forEach((row) => {
+    opt += '<option value= '+ row.classification_id + '>' 
+      + row.classification_name + '</option>'
+  })
+
+  opt += "</select>"
+
+  return opt
+}
+
 
 /* ****************************************
  * Middleware For Handling Errors
