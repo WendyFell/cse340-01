@@ -71,24 +71,27 @@ validate.addInventoryRules = () => {
 
     // valid image
     body("inv_image")
-      .trim(),     
-      // .withMessage("Please provide a jpg."),
+      .trim()
+      .isLength ({ min: 20 })   
+      .withMessage("Please provide a jpg."),
 
     // valid thumbnail image
     body("inv_thumbnail")
-      .trim(),     
-      // .withMessage("Please provide a jpg."),
+      .trim()
+      .isLength ({ min: 20 })     
+      .withMessage("Please provide a jpg."),
 
     // valid price
     body("inv_price")
-      .trim() ,    
-      // .withMessage("Please provide a jpg."),
+      .trim() 
+      .isInt()  
+      .withMessage("Please provide a valid price."),
 
     //valid mileage
     body("inv_miles")
       .trim()
       .isInt()
-      .withMessage("Please provide mileage."),
+      .withMessage("Please provide a number of miles."),
 
     // valid color
     body("inv_color")
