@@ -43,18 +43,6 @@ async function buildManagement(req, res, next) {
 /* ****************************************
 *  Deliver update account view (unit 5 assignment)
 * *************************************** */
-// async function buildUpdateAccount(req, res, next) {
-//   let nav = await utilities.getNav()
-//   res.render("account/update", {
-//     title: "Manage Account",
-//     nav,
-//     errors: null,
-//   })
-// }  
-
-/* ****************************************
-*  Deliver update account view (unit 5 assignment)
-* *************************************** */
 async function buildUpdateAccount(req, res, next) {
   const account_id = parseInt(req.params.account_id)
   let nav = await utilities.getNav()
@@ -69,7 +57,6 @@ async function buildUpdateAccount(req, res, next) {
     account_id:accountData.account_id
   })
 }  
-
 
 /* ****************************************
 *  Process Registration (unit 4 activity)
@@ -156,12 +143,13 @@ async function accountLogin(req, res) {
 * *************************************** */
 async function updateAccountInfo(req, res) {
   let nav = await utilities.getNav()
-  const { account_firstname, account_lastname, account_email } = req.body
+  const { account_firstname, account_lastname, account_email, account_id } = req.body
 
   const infoChangeResult = await accountModel.updateAccountInfo( 
     account_firstname,
     account_lastname,
     account_email,
+    account_id,
   )
 
   if (infoChangeResult) {

@@ -45,7 +45,7 @@ router.post(
 router.post(
     "/updateAccount",
     regValidate.updateAccountRules(),
-    regValidate.checkRegData,
+    regValidate.checkAccountData,
     utilities.handleErrors(accountController.updateAccountInfo),
 )
 
@@ -53,7 +53,6 @@ router.post(
 router.post(
     "/updatePassword",
     regValidate.updatePasswordRules(),
-    // regValidate.checkRegData,
     utilities.handleErrors(accountController.updatePassword),
 )
 
