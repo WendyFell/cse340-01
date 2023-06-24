@@ -1,0 +1,55 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+    res.redirect('/')
+    } %>
+
+<%- messages() %>    
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<!-- Account Change Form -->
+<div class="form" id="form"> 
+  <form class="loginForm" id="editAccountForm" action="/updateAccount" method="post">
+    <h3>Change Account Information</h3>
+    <label for="account_firstname">First Name</label>
+    <input type="text" id="account_firstname" placeholder="Enter First Name" name="account_firstname"  value="<%=locals.accountData.account_firstname %>" required>
+
+    <label for="account_lastname">Last Name</label>
+    <input type="text" id="account_lastname" placeholder="Enter Last Name" name="account_lastname"  value="<%=locals.accountData.account_lastname %>" required>
+    
+    <label for="account_email">Email</label>
+    <input type="email" id="account_email" placeholder="Enter Email" name="account_email" value="<%=locals.accountData.account_email %>"required>
+
+    <input type="hidden" name="inv_id" value="<%= locals.accountData.account_id %>" >
+    
+
+    <button id="submitBtn" type="submit">Update</button>
+    
+  </form>  
+</div>
+<!-- Password Change Form -->
+<div class="form" id="form"> 
+  <form class="changePasswordForm" id="" action="/updatePassword" method="post">
+    <h3>Change Password</h3>
+    <label for="account_password">Enter Current Password</label>
+    <input type="password" id="account_password" placeholder="Enter Password" name="account_password"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+
+    <label for="account_password">Enter New Password</label>
+    <input type="password" id="account_new_password" placeholder="Enter New Password" name="account_password"  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required>
+
+    <p class="infoPassword">Entering a new password will change the current password. Password must be at least 12 characters, contain at least 1 capital letter, 1 number, and 1 special character</p>
+
+    <span id="pswdBtn">Show Password</span>
+    <button id="submitBtn" type="submit">Update</button>
+    <input type="hidden" name="inv_id"
+    <% if(locals.account_id) { %> value="<%= locals.account_id %>"
+    <% } %>>
+  </form>
+</div>

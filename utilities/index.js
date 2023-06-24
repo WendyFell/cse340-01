@@ -1,5 +1,8 @@
 /* Unit 3 MVC implementation activity */
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+
 const Util = {}
 
 /* ************************
@@ -59,10 +62,10 @@ Util.buildClassificationGrid = async function(data){
   return grid
 }
 
-// /* **************************************
-//  * Custom function that gets the vehicle information and wraps it up in HTML 
-//  * Unit 3 assignment 1.2.4
-//  * ************************************ */
+/* **************************************
+ * Custom function that gets the vehicle information and wraps it up in HTML 
+ * Unit 3 assignment 1.2.4
+ * ************************************ */
 Util.buildVehicleView = async function(data1){
   let vehicleView
   if(data1.length > 0){
@@ -92,34 +95,18 @@ Util.buildVehicleView = async function(data1){
   return vehicleView
 }
 
-// /* **************************************
-//  * Custom function that gets the classification information and puts it in a option  
-//  * Unit 4 assignment 4.3
-//  * ************************************ */
-// Util.classificationIdName = async function(data){
-//   const data1 = await invModel.getInventoryByClassificationId(classification_id)
-//   let classificationName
-//   if(data1.length > 0){
-//     classificationName = '<select name="classification_id">'
-//     '<option value="Select Value"></option>'
-//     data1.forEach(vehicle => { 
-//       classificationName += '<option value= '+ vehicle.classification_id + '>' 
-//       + vehicle.classification_name + '</option>'
-//     })
-//     classificationName += '</select>'
-//   } else { 
-//     classificationName += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
-//   }
-//   return classificationName
-// }
-
-Util.getClassificationOpt = async function (req, res, next) {
+/* **************************************
+ * Custom function that gets the classification name and wraps it up in the select option tag 
+ * Unit 4
+ * ************************************ */
+Util.getClassificationOpt = async function (optionSelected = null) {
   let data = await invModel.getClassifications()
-  let opt = '<select name="classification_id" class="selectItems">'
-  opt += '<option value="0">Select Classification</option>'
+  
+  let opt = '<select name="classification_id" id="classificationList" class="selectItems">'
+  opt += '<option value="">Select Classification</option>'
   data.rows.forEach((row) => {
-    opt += '<option value= '+ row.classification_id + '>' 
-      + row.classification_name + '</option>'
+    opt += `<option value= "${row.classification_id}" <${row.classification_id ===  Number(optionSelected) ? " selected " : ""} > 
+      ${row.classification_name}</option>`
   })
 
   opt += "</select>"
@@ -127,6 +114,40 @@ Util.getClassificationOpt = async function (req, res, next) {
   return opt
 }
 
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+    req.cookies.jwt,
+    process.env.ACCESS_TOKEN_SECRET,
+    function (err, accountData) {
+      if (err) {
+      req.flash("Please log in")
+      res.clearCookie("jwt")
+      return res.redirect("/account/login")
+      }
+      res.locals.accountData = accountData
+      res.locals.loggedin = 1
+      next()
+    })
+  } else {
+    next()
+  }
+}
+
+/* ****************************************
+*  Check Login
+* ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
 
 /* ****************************************
  * Middleware For Handling Errors

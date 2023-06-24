@@ -21,14 +21,14 @@
   --large-font: 2em;  
 }
 body {
-  display: flex;
+
   justify-content: center;
   align-items: center;
 } 
 #wrapper {
   background-color: white;
 }
-h1 {
+h1, h2 {
   font-family: var(--font-head);
 }
 p {
@@ -63,7 +63,9 @@ nav {
 nav ul {
   list-style: none;
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
   padding: 10px;
   font-family: var(--font-head);
   color: white;
@@ -71,6 +73,8 @@ nav ul {
  nav ul li a {
   text-decoration: none;
   color: white;
+  padding: 2px;
+  
 }
  nav ul li a:hover { 
   background-color: var(--secondary-color);
@@ -245,6 +249,16 @@ textarea {
   font-size: 24px;
   cursor: pointer;
 }
+#submitBtn:disabled {
+  text-transform: uppercase;
+  outline: 0;
+  background-color: gray;
+  
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  
+}
 .form .sign-up {
   margin: 15px 0 0;
   color: var(--dark-color);
@@ -304,12 +318,27 @@ input:required:valid {
   font-size: 16px;
  
 }
+ #inventoryDisplay {
+  font-family: var(--font-body);
+  border-spacing: 1rem;
+ }
+ tr {
+  padding: 20px;
+ }
+ td a {
+  text-decoration: none;
+  color: var(--dark-color);
+  background-color: var(--primary-light);
+  padding: 2px;
+ 
+ }
 
 /* ******************************************* */
 /* ************** Large Screen *************** */
 /* ******************************************* */
 @media only screen and (min-width: 550px) {
   body {
+    display: flex;
     background: repeat url("/images/site/small_check.jpg");    
     /* background-size: 30%; */
   }

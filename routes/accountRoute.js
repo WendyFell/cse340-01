@@ -11,6 +11,19 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin));
 // Route to build account registration form (unit 4 activity)
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
+// Route to build account management view (unit 5 activity)
+router.get(
+    "/", 
+    utilities.checkLogin, 
+    utilities.handleErrors(accountController.buildManagement)
+);
+
+// Route to build update form (unit 5 assignment)
+router.get("/update", utilities.handleErrors(accountController.buildUpdateAccount));
+
+//Route for destroying cookie assignment 5
+router.get('/logout', utilities.handleErrors(accountController.logout));
+
 // Functionality to enable the registration route
 router.post(
     "/register", 
@@ -22,11 +35,26 @@ router.post(
 // Process the login attempt
 router.post(
     "/login",
+    utilities.checkJWTToken, //unit 5
     regValidate.loginRules(),
     regValidate.checkloginData,
-    (req, res) => {
-      res.status(200).send('login process')
-    }
+    utilities.handleErrors(accountController.accountLogin) // unit 5
+)
+
+// Process the update attempt assignment 5
+router.post(
+    "/updateAccount",
+    regValidate.updateAccountRules(),
+    regValidate.checkRegData,
+    utilities.handleErrors(accountController.updateAccountInfo),
+)
+
+// Process the update attempt assignment 5
+router.post(
+    "/updatePassword",
+    regValidate.updatePasswordRules(),
+    // regValidate.checkRegData,
+    utilities.handleErrors(accountController.updatePassword),
 )
 
 module.exports = router;

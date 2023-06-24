@@ -14,6 +14,7 @@ const utilities = require("./utilities/")
 const session = require ("express-session")
 const pool = require("./database/")
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser") /* unit 5 login */
 
 /* ***********************
  * Middleware
@@ -39,6 +40,10 @@ app.use(function(req, res, next){
 // unit 4 process registration activity, makes the body-parser available
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+// Unit 5 JWT and Cookie activity, allows the cookie parser to be implemented
+app.use(cookieParser()) 
+app.use(utilities.checkJWTToken)
 
 /* ***********************
  * View Engine and Templates
@@ -66,7 +71,7 @@ app.get("/error", utilities.handleErrors(baseController.errorFunc))
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+  next({status: 404, message: 'Sorry, Keep trying.'})
 })
 
 
