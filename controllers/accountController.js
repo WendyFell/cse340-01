@@ -151,13 +151,13 @@ async function updateAccountInfo(req, res) {
     account_email,
     account_id,
   )
-
-  if (infoChangeResult) {
+    console.log(infoChangeResult)
+  if (infoChangeResult ) {
     req.flash(
       "notice",
       `${account_firstname}, your information was changed.`
     )
-    res.status(201).render("/account/mangement", {
+    res.status(201).render("account/account-management", {
       title: "Manage Account",
       nav,
       errors: null,

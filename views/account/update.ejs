@@ -16,7 +16,7 @@
 
 <!-- Account Change Form -->
 <div class="form" id="form"> 
-  <form class="loginForm" id="editAccountForm" action="/updateAccount" method="post">
+  <form class="loginForm" id="editAccountForm" action="/account/updateAccount" method="post">
     <h3>Change Account Information</h3>
     <label for="account_firstname">First Name</label>
     <input type="text" id="account_firstname" placeholder="Enter First Name" name="account_firstname"  value="<%=locals.accountData.account_firstname %>" required>
@@ -29,7 +29,6 @@
 
     <input type="hidden" name="inv_id" value="<%= locals.accountData.account_id %>" >
     
-
     <button id="submitBtn" type="submit">Update</button>
     
   </form>  

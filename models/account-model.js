@@ -56,10 +56,11 @@ async function getAccountByEmail (account_email) {
 /* *****************************
 *   Update account information from update view (assignment 5)
 * *************************** */
-async function updateAccountInfo(account_firstname, account_lastname, account_email){
+async function updateAccountInfo(account_firstname, account_lastname, account_email, account_id){
   try {
-    const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_type) VALUES ($1, $2, $3, 'Client') RETURNING *"
-    return await pool.query(sql, [account_firstname, account_lastname, account_email])
+    const sql = "UPDATE account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4"
+    const result = await pool.query(sql, [account_firstname, account_lastname, account_email, account_id])
+    return result.rows
   } catch (error) {
     return error.message
   }
@@ -84,8 +85,9 @@ async function getAccountById (account_id) {
 * *************************** */
 async function updatePassword(account_password){
   try {
-    const sql = "INSERT INTO account (account_password) VALUES $1,  RETURNING *"
-    return await pool.query(sql, [account_password])
+    const sql = "UPDATE account SET account_password = $1 WHERE account_id = $2"
+    const result = await pool.query(sql, [account_password, account_id])
+    return result.rows
   } catch (error) {
     return error.message
   }

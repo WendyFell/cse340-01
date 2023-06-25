@@ -43,12 +43,12 @@ invCont.buildByInvId = async function (req, res, next) {
  * ************************** */
 invCont.buildManager = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const classificationSelect = await utilities.getClassificationOpt()
+  const options = await utilities.getClassificationOpt()
     res.render("./inventory/management", {
       title: "Management",
       nav,
-      errors: null,
-      classificationSelect,
+      // errors: null,
+      options,
     })
 }
 
@@ -69,11 +69,11 @@ invCont.buildAddClassification = async function (req, res, next) {
  * ************************** */
 invCont.buildAddInventory = async function (req, res, next) {
   let nav = await utilities.getNav()
-  let classificationSelect = await utilities.getClassificationOpt()
+  let options = await utilities.getClassificationOpt()
     res.render("./inventory/add-inventory", {
       title: "Enter New Inventory",
       nav, 
-      classificationSelect,
+      options,
       errors: null,
     })
 }
@@ -137,11 +137,11 @@ invCont.addInventory = async function (req, res) {
     })
   } else {
     req.flash("notice", "Sorry, the new inventory wasn't entered.")
-    let classificationSelect = await utilities.getClassificationOpt()
+    let options = await utilities.getClassificationOpt()
     res.status(501).render("./inventory/add-inventory", {
       title: "Enter new inventory",
       nav,
-      classificationSelect,
+      options,
       errors: null,
     })
   }
@@ -168,12 +168,12 @@ invCont.editInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
   const itemData = await invModel.getInventoryByInvId(inv_id)
   console.log(itemData)
-  const classificationSelect = await utilities.getClassificationOpt(itemData[0].classification_id)
+  const options = await utilities.getClassificationOpt(itemData[0].classification_id)
   const itemName = `${itemData[0].inv_make} ${itemData[0].inv_model}`
   res.render("inventory/edit-inventory", {
     title: "Edit " + itemName,
     nav,
-    classificationSelect: classificationSelect,
+    options: options,
     errors: null,
     inv_id: itemData[0].inv_id,
     inv_make: itemData[0].inv_make,
@@ -226,13 +226,13 @@ invCont.updateInventory = async function (req, res, next) {
     req.flash("notice", `The ${itemName} was successfully updated.`)
     res.redirect("/inv/")
   } else {
-    const classificationSelect = await utilities.getClassificationOpt(classification_id)
+    const options = await utilities.getClassificationOpt(classification_id)
     const itemName = `${inv_make} ${inv_model}`
     req.flash("notice", "Sorry, the insert failed.")
     res.status(501).render("inventory/edit-inventory", {
     title: "Edit " + itemName,
     nav,
-    classificationSelect: classificationSelect,
+    options: options,
     errors: null,
     inv_id,
     inv_make,
