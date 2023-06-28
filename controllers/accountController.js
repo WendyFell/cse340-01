@@ -143,21 +143,27 @@ async function accountLogin(req, res) {
 * *************************************** */
 async function updateAccountInfo(req, res) {
   let nav = await utilities.getNav()
-  const { account_firstname, account_lastname, account_email, account_id } = req.body
-
+  const account_id = parseInt(req.body.account_id)
+  const { account_firstname, account_lastname, account_email } = req.body
   const infoChangeResult = await accountModel.updateAccountInfo( 
     account_firstname,
     account_lastname,
     account_email,
     account_id,
   )
-    console.log(infoChangeResult)
+  console.log(infoChangeResult)
   if (infoChangeResult ) {
+
+    const accountData = await accountModel.getAccountByEmail(account_email)
+    res.clearCookie("jwt")
+    const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+    res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+    
     req.flash(
       "notice",
       `${account_firstname}, your information was changed.`
     )
-    res.status(201).render("account/account-management", {
+    return res.status(201).render("account/account-management", {
       title: "Manage Account",
       nav,
       errors: null,
@@ -167,6 +173,7 @@ async function updateAccountInfo(req, res) {
     res.status(501).render("account/update", {
       title: "Manage Account",
       nav,
+      errors: null,
     })
   }
 }
@@ -192,7 +199,7 @@ async function updatePassword(req, res) {
     })
   }
 
-  const passChangeResult = await accountModel.registerAccount( // ******** new model here **********
+  const passChangeResult = await accountModel.updatePassword( 
     hashedPassword
   )
 

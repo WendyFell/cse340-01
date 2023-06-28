@@ -105,7 +105,7 @@ Util.getClassificationOpt = async function (optionSelected = null) {
   let opt = '<select name="classification_id" id="classificationList" class="selectItems">'
   opt += '<option value="">Select Classification</option>'
   data.rows.forEach((row) => {
-    opt += `<option value= "${row.classification_id}" <${row.classification_id ===  Number(optionSelected) ? " selected " : ""} > 
+    opt += `<option value= "${row.classification_id}" ${row.classification_id ===  Number(optionSelected) ? " selected " : ""} > 
       ${row.classification_name}</option>`
   })
 

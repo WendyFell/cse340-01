@@ -43,7 +43,7 @@ invCont.buildByInvId = async function (req, res, next) {
  * ************************** */
 invCont.buildManager = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const options = await utilities.getClassificationOpt()
+  const options = await utilities.getClassificationOpt() // unit 5 
     res.render("./inventory/management", {
       title: "Management",
       nav,

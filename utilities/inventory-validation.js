@@ -111,7 +111,7 @@ validate.checkInventoryData = async (req, res, next) => {
   errors = validationResult(req)
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()
-    let classificationSelect = await utilities.getClassificationOpt()
+    let options = await utilities.getClassificationOpt()
     res.render("inventory/add-inventory", {
       errors,
       title: "Enter New Inventory",
@@ -126,7 +126,7 @@ validate.checkInventoryData = async (req, res, next) => {
       inv_miles, 
       inv_color, 
       classification_id,
-      classificationSelect
+      options
     })
     return
   }
@@ -142,7 +142,7 @@ validate.checkInventoryData = async (req, res, next) => {
   errors = validationResult(req)
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()
-    let classificationSelect = await utilities.getClassificationOpt()
+    let options = await utilities.getClassificationOpt()
     res.render("inventory/edit-inventory", {
       errors,
       title:  "Edit ",
@@ -158,7 +158,7 @@ validate.checkInventoryData = async (req, res, next) => {
       inv_miles, 
       inv_color, 
       classification_id,
-      classificationSelect
+      options
     })
     return
   }
