@@ -152,18 +152,20 @@ async function updateAccountInfo(req, res) {
     account_id,
   )
   console.log(infoChangeResult)
-  if (infoChangeResult ) {
+  const accountById = await accountModel.getAccountById(account_id)
+  res.locals.accountData = accountById
 
-    const accountData = await accountModel.getAccountByEmail(account_email)
-    res.clearCookie("jwt")
-    const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+  if (infoChangeResult && accountById) {
+    utilities.deleteCookie
+    const accountData = await accountModel.getAccountById(account_id)
+    accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
     res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
     
     req.flash(
       "notice",
       `${account_firstname}, your information was changed.`
     )
-    return res.status(201).render("account/account-management", {
+    res.status(201).render("account/account-management", {
       title: "Manage Account",
       nav,
       errors: null,
@@ -230,6 +232,24 @@ async function logout(req, res, next) {
   return res.redirect("/")
 }  
 
+/* ***************************
+ *  Build inbox view (final project)
+ * ************************** */
+async function buildInbox (req, res, next) {
+  const message_id = req.params.messageId
+  const messageData = await invModel.getInboxData(message_id)
+  console.log("Hey")
+  const messageList = await utilities.buildInboxView(messageData)
+  let nav = await utilities.getNav()
+  const messageTo = data[0].message_to
+  res.render("./account/inbox", {
+    title: messageTo ,
+    nav,
+    messageList,
+  })
+}
+
+
 
 module.exports = { 
   buildLogin, 
@@ -240,5 +260,6 @@ module.exports = {
   buildUpdateAccount, 
   updateAccountInfo, 
   updatePassword, 
-  logout 
+  logout,
+  buildInbox,
 };

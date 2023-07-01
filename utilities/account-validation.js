@@ -148,16 +148,16 @@ validate.updateAccountRules = () => {
     .isEmail()
     .normalizeEmail() // refer to validator.js docs
     .withMessage("A valid email is required.")
-    .custom(async (account_email) => {
-      const account_id = body.account_id
-      const account = accountModel.getAccountById(account_id)
-      // Check if email entered is the same as an existing email
-      if (!account_email == account.account_email) {
-        // not the same
+    .custom(async (account_email, {req}) => {
+      const account_id = req.body.account_id
+      const account = await accountModel.getAccountById(account_id)
+      // Check if submitted email is same as existing
+      if (account_email != account.account_email) {
+      // No - Check if email exists in table
         const emailExists = await accountModel.checkExistingEmail(account_email)
-        // the same
-        if (emailExists){
-          throw new Error("Email exists. Please log in or use different email")
+        // Yes - throw error
+        if (emailExists.count != 0) {
+        throw new Error("Email exists. Please use a different email")
         }
       }        
     }),

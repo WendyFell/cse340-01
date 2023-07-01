@@ -149,6 +149,37 @@ Util.checkLogin = (req, res, next) => {
   }
 }
 
+/* Delete cookie on update account */
+Util.deleteCookie = (req, res, next) => {
+  if (req.cookies.jwt) {
+    res.clearCookie("jwt")
+    return res.redirect("/")
+  }
+  res.locals.accountData = null
+  res.locals.loggedin = 0
+      next()
+}
+
+/* **************************************
+* Build the classification view HTML
+* ************************************ */
+Util.buildInboxView = async function(messageData){
+  let accountList
+  if(messageData.length > 0){
+    accountList = '<ul id="message-display">'
+    messageData.forEach(message => { 
+      accountList += '<li>'
+      accountList +=  '<a href="../../account/inbox/'+ message.message_id + '" title="View Message"></a>'
+      
+      grid += '</li>'
+    })
+    accountList += '</ul>'
+  } else { 
+    accountList += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return accountList
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

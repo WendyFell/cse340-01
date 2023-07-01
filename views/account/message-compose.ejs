@@ -1,0 +1,38 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+    res.redirect('/')
+    } %>
+
+<%- messages() %>    
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+
+<div class="form">
+    <form class="messageForm" id="messageForm" action="account/message-compose" method="post">
+        <!-- message: to, subject, from, body. buttons: return to inbox, reply, mark as read, archive message, delete message -->
+        <div >
+            <p>All fields must be filled out.</p>
+            <label for="message_to">To</label> <!-- drop down showing all clients-->
+            <input type="text" id="" placeholder="" name=""  value="<%=locals.account_firstname %>" required>
+
+            <label for="message_subject">Subject</label>
+            <input type="text" id="" placeholder="" name=""  value="<%=locals.account_lastname %>" required>
+            
+            <label for="message_body">Content</label>
+            <textarea id="" placeholder="" name=""  rows="5" cols="33"  required><%- locals.inv_description %></textarea>
+
+            <!-- <button id="loginBtn" type="submit">Register</button> -->
+            <input type="submit" id="submitBtn" value="send message">
+            
+
+        </div>
+    </form>
+</div>

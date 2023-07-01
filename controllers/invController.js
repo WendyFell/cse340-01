@@ -84,6 +84,7 @@ invCont.buildAddInventory = async function (req, res, next) {
 invCont.addClassification = async function (req, res) {
   const {classification_name} = req.body
   const classResult = await invModel.newClassification(classification_name)
+  const options = await utilities.getClassificationOpt()
   let nav = await utilities.getNav()
   if (classResult) {
     req.flash(
@@ -93,7 +94,7 @@ invCont.addClassification = async function (req, res) {
     res.status(201).render("./inventory/management", {
       title: "Management",
       nav,
-
+      options,
     })
   } else {
     req.flash("notice", "Sorry, the new classification wasn't entered.")
@@ -111,7 +112,7 @@ invCont.addClassification = async function (req, res) {
 invCont.addInventory = async function (req, res) {
   let nav = await utilities.getNav()
   const { inv_make, inv_model,inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color,classification_id } = req.body
-  
+  const options = await utilities.getClassificationOpt()
   const invResult = await invModel.newInventory(
     inv_make, 
     inv_model,
@@ -134,6 +135,7 @@ invCont.addInventory = async function (req, res) {
       title: "Management",
       nav,
       errors: null,
+      options,
     })
   } else {
     req.flash("notice", "Sorry, the new inventory wasn't entered.")
@@ -275,14 +277,15 @@ invCont.deleteInventory = async function (req, res, next) {
   let nav = await utilities.getNav()
   // const inv_id = parseInt(req.params.inv_id)
   const { inv_id } = req.body
+  console.log("Me" + inv_id)
   const deleteResult = await invModel.deleteInventory(inv_id)
-
+  console.log("Hey" + deleteResult)
   if (deleteResult) {    
     req.flash("notice", "The vehicle was deleted")
     res.redirect("/inv/")
   } else {
     const itemData = await invModel.getInventoryByInvId(inv_id)
-    console.log(itemData)
+    // console.log(itemData)
     req.flash("notice", "Sorry, the delete failed.")
     res.render("inventory/delete-confirm", {
       title: "Delete ",

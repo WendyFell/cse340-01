@@ -19,6 +19,13 @@
 <h3>Account Management</h3>
 <a class="manageItem" title="Click to add change account information" href="/account/update">Manage Account</a>
 
+
+
+  <h3>Messages</h3>
+  <p>You have number<!--ejs tag here--> unread messages</p>
+  <a class="messageInbox" title="Click to view inbox" href="/account/inbox">Inbox</a>
+ 
+
 <!-- If the account is Employee or Admin type -->
 <% if ((locals.accountData.account_type == "Admin" ) || (locals.accountData.account_type == "Employee" )) { %>
 
