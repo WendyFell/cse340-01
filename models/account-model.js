@@ -97,15 +97,15 @@ async function updatePassword(account_password){
 /* ***************************
  *  Get all messages and account first name by account_id
  * ************************** */
-async function getInboxData(classification_id) {
+async function getInboxData(account_id) {
   try {
-    const data = await pool.query(
-      "SELECT * FROM public.message AS i JOIN public.account AS c ON i.account_id = c.account_id WHERE i.account_id = $1",
+    const messageData = await pool.query(
+      "SELECT * FROM public.message AS i JOIN public.account AS c ON i.message_to = c.account_id WHERE i.message_to = $1",
       [account_id]
     )
-    return data.rows
+    return messageData.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("getinboxbyid error " + error)
   }
 }
 

@@ -236,19 +236,36 @@ async function logout(req, res, next) {
  *  Build inbox view (final project)
  * ************************** */
 async function buildInbox (req, res, next) {
-  const message_id = req.params.messageId
-  const messageData = await invModel.getInboxData(message_id)
-  console.log("Hey")
-  const messageList = await utilities.buildInboxView(messageData)
+  console.log("What")
+  const account_id = req.params.accountId
+  console.log(account_id)
+  const messageData = await accountModel.getInboxData(account_id)
+  console.log(messageData)
+  const messageList = await utilities.buildInbox(messageData)
   let nav = await utilities.getNav()
-  const messageTo = data[0].message_to
+  const messageTo = messageData[0].message_to
   res.render("./account/inbox", {
     title: messageTo ,
     nav,
     messageList,
   })
 }
-
+async function buildInbox (req, res, next) {
+  const messageData = await accountModel.getInboxData(account_id)
+  const messageList = await utilities.buildInbox(messageData)
+  let nav = await utilities.getNav()
+  const messageTo = messageData[0].message_to
+  res.render("./account/inbox", {
+    title: messageTo ,
+    nav,
+    messageList,
+  })
+}
+// baseController.buildHome = async function(req, res){
+//   const nav = await utilities.getNav()
+//   // req.flash("notice", "This is a flash message.") // (Activity unit 4-Sessions and Messages)
+//   res.render("index", {title: "Home", nav})
+// }
 
 
 module.exports = { 

@@ -25,7 +25,7 @@ router.get("/update", utilities.handleErrors(accountController.buildUpdateAccoun
 router.get('/logout', utilities.handleErrors(accountController.logout));
 
 // Route to build the inbox. Final project
-router.get("/inbox/:messageId", utilities.handleErrors(accountController.buildInbox));
+router.get("/inbox/:accountId", utilities.handleErrors(accountController.buildInbox));
 
 // Functionality to enable the registration route
 router.post(

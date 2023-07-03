@@ -163,22 +163,62 @@ Util.deleteCookie = (req, res, next) => {
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
-Util.buildInboxView = async function(messageData){
-  let accountList
-  if(messageData.length > 0){
-    accountList = '<ul id="message-display">'
-    messageData.forEach(message => { 
-      accountList += '<li>'
-      accountList +=  '<a href="../../account/inbox/'+ message.message_id + '" title="View Message"></a>'
+// Util.buildInboxView = async function(messageData){
+
+//   let accountList
+//   if(messageData.length > 0){
+//     accountList = '<ul id="message-display">'
+//     messageData.forEach(message => { 
+//       accountList += '<li>'
+//       accountList +=  '<a href="../../account/inbox/'+ message.message_id + '" title="View Message"></a>'
       
-      grid += '</li>'
-    })
-    accountList += '</ul>'
-  } else { 
-    accountList += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
-  }
+//       grid += '</li>'
+//     })
+//     accountList += '</ul>'
+//   } else { 
+//     accountList += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+//   }
+//   return accountList
+// }
+Util.buildInbox = async function (req, res, next) {
+  let messageData = await invModel.getInboxData()
+  let accountList = "<ul>"
+  messageData.rows.forEach((row) => {
+    accountList += "<li>"
+    accountList +=
+      '<a href="/account/inbox/' +
+      row.classification_id +
+      '" title="See our inventory of ' +
+      row.classification_name +
+      ' vehicles">' +
+      row.classification_name +
+      "</a>"
+      accountList += "</li>"
+  })
+  accountList += "</ul>"
   return accountList
 }
+// function buildInventoryList(data) { 
+//   let inventoryDisplay = document.getElementById("inventoryDisplay"); 
+//   // Set up the table labels 
+//   let dataTable = '<thead>'; 
+//   dataTable += '<tr><th>Vehicle Name</th><td>&nbsp;</td><td>&nbsp;</td></tr>'; 
+//   dataTable += '</thead>'; 
+//   // Set up the table body 
+//   dataTable += '<tbody>'; 
+//   // Iterate over all vehicles in the array and put each in a row 
+//   data.forEach(function (element) { 
+//    console.log(element.inv_id + ", " + element.inv_model); 
+//    dataTable += `<tr><td>${element.inv_make} ${element.inv_model}</td>`; 
+//    dataTable += `<td><a href='/inv/edit/${element.inv_id}' title='Click to update'>Modify</a></td>`; 
+//    dataTable += `<td><a href='/inv/delete/${element.inv_id}' title='Click to delete'>Delete</a></td></tr>`; 
+//   }) 
+//   dataTable += '</tbody>'; 
+//   // Display the contents in the Inventory Management view 
+//   inventoryDisplay.innerHTML = dataTable; 
+//  } 
+
+
 
 /* ****************************************
  * Middleware For Handling Errors
