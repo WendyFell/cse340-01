@@ -67,7 +67,7 @@ async function updateAccountInfo(account_firstname, account_lastname, account_em
 }
 
 /* *****************************
-* Return account data using email address
+* Return account data 
 * ***************************** */
 async function getAccountById (account_id) {
   try {
@@ -95,14 +95,21 @@ async function updatePassword(account_password){
 }
 
 /* ***************************
+ *  Get all account data
+ * ************************** */
+async function getMessageById(){
+  return await pool.query("SELECT * FROM public.message ORDER BY message_to")
+}
+
+/* ***************************
  *  Get all messages and account first name by account_id
  * ************************** */
-async function getInboxData(account_id) {
+async function getInboxData(message_to) {
   try {
     const messageData = await pool.query(
       "SELECT * FROM public.message AS i JOIN public.account AS c ON i.message_to = c.account_id WHERE i.message_to = $1",
-      [account_id]
-    )
+      [message_to]
+    )    
     return messageData.rows
   } catch (error) {
     console.error("getinboxbyid error " + error)
@@ -118,5 +125,6 @@ module.exports = {
   updateAccountInfo,
   getAccountById,
   updatePassword,
+  getMessageById,
   getInboxData
 };

@@ -200,11 +200,9 @@ async function updatePassword(req, res) {
       errors: null,
     })
   }
-
   const passChangeResult = await accountModel.updatePassword( 
     hashedPassword
   )
-
   if (passChangeResultResult) {
     req.flash(
       "notice",
@@ -236,37 +234,21 @@ async function logout(req, res, next) {
  *  Build inbox view (final project)
  * ************************** */
 async function buildInbox (req, res, next) {
-  console.log("What")
-  const account_id = req.params.accountId
-  console.log(account_id)
-  const messageData = await accountModel.getInboxData(account_id)
+  console.log("test1")
+  const message_to =  res.locals.accountData.account_id 
+  console.log(message_to)
+  const messageData = await accountModel.getInboxData(message_to)
   console.log(messageData)
-  const messageList = await utilities.buildInbox(messageData)
+  const messageTable = await utilities.buildInbox(messageData)
+  // console.log(messageTable)
   let nav = await utilities.getNav()
-  const messageTo = messageData[0].message_to
   res.render("./account/inbox", {
-    title: messageTo ,
+    title: "Messages" ,
     nav,
-    messageList,
+    errors: null,
+    messageTable,
   })
 }
-async function buildInbox (req, res, next) {
-  const messageData = await accountModel.getInboxData(account_id)
-  const messageList = await utilities.buildInbox(messageData)
-  let nav = await utilities.getNav()
-  const messageTo = messageData[0].message_to
-  res.render("./account/inbox", {
-    title: messageTo ,
-    nav,
-    messageList,
-  })
-}
-// baseController.buildHome = async function(req, res){
-//   const nav = await utilities.getNav()
-//   // req.flash("notice", "This is a flash message.") // (Activity unit 4-Sessions and Messages)
-//   res.render("index", {title: "Home", nav})
-// }
-
 
 module.exports = { 
   buildLogin, 
@@ -278,5 +260,5 @@ module.exports = {
   updateAccountInfo, 
   updatePassword, 
   logout,
-  buildInbox,
+  buildInbox
 };

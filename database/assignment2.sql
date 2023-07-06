@@ -46,3 +46,60 @@ SET
 		'/images/',
 		'/images/vehicles/'
 	);
+
+-- messages
+INSERT INTO public.message (
+	message_subject,
+	message_body,
+	message_to,
+	message_from
+)
+VALUES (
+	'Testing',
+	'Need more testing tests',
+	'11',
+	'13'
+);
+
+INSERT INTO public.message (
+	message_subject,
+	message_body,
+	message_to,
+	message_from
+)
+VALUES (
+	'Testing',
+	'Need more testing tests',
+	'11',
+	'13'
+);
+
+INSERT INTO public.message (
+	message_subject,
+	message_body,
+	message_to,
+	message_from,
+	message_archived
+)
+VALUES (
+	'Archive Testing',
+	'Is the archive working',
+	'12',
+	'13',
+	true
+);
+
+INSERT INTO public.message (
+	message_subject,
+	message_body,
+	message_to,
+	message_from,
+	message_read
+)
+VALUES (
+	'Read Testing',
+	'Is the message read working',
+	'13',
+	'11',
+	true
+);

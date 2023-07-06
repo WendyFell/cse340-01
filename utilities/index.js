@@ -1,5 +1,6 @@
 /* Unit 3 MVC implementation activity */
 const invModel = require("../models/inventory-model")
+const accountModel = require("../models/account-model")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
@@ -101,16 +102,13 @@ Util.buildVehicleView = async function(data1){
  * ************************************ */
 Util.getClassificationOpt = async function (optionSelected = null) {
   let data = await invModel.getClassifications()
-  
   let opt = '<select name="classification_id" id="classificationList" class="selectItems">'
   opt += '<option value="">Select Classification</option>'
   data.rows.forEach((row) => {
     opt += `<option value= "${row.classification_id}" ${row.classification_id ===  Number(optionSelected) ? " selected " : ""} > 
       ${row.classification_name}</option>`
   })
-
   opt += "</select>"
-
   return opt
 }
 
@@ -149,7 +147,9 @@ Util.checkLogin = (req, res, next) => {
   }
 }
 
-/* Delete cookie on update account */
+/* ************************************
+*  Delete cookie on update account 
+* ************************************* */
 Util.deleteCookie = (req, res, next) => {
   if (req.cookies.jwt) {
     res.clearCookie("jwt")
@@ -161,62 +161,33 @@ Util.deleteCookie = (req, res, next) => {
 }
 
 /* **************************************
-* Build the classification view HTML
+* Build the inbox view HTML
 * ************************************ */
-// Util.buildInboxView = async function(messageData){
-
-//   let accountList
-//   if(messageData.length > 0){
-//     accountList = '<ul id="message-display">'
-//     messageData.forEach(message => { 
-//       accountList += '<li>'
-//       accountList +=  '<a href="../../account/inbox/'+ message.message_id + '" title="View Message"></a>'
+Util.buildInbox = async function(messageData) { 
+   let messageTable
+   if (messageData.length > 0) {
+      messageTable = '<table class="messageTable">'; 
+      messageTable += '<tr>';
+      messageTable += '<th>Received</th>';
+      messageTable += '<th>Subject</th>';
+      messageTable += '<th>From</th>';
+      messageTable += '<th>Read</th>';
+      messageTable += '</tr>'; 
+      messageTable += '</thead>'; 
       
-//       grid += '</li>'
-//     })
-//     accountList += '</ul>'
-//   } else { 
-//     accountList += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
-//   }
-//   return accountList
-// }
-Util.buildInbox = async function (req, res, next) {
-  let messageData = await invModel.getInboxData()
-  let accountList = "<ul>"
-  messageData.rows.forEach((row) => {
-    accountList += "<li>"
-    accountList +=
-      '<a href="/account/inbox/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>"
-      accountList += "</li>"
-  })
-  accountList += "</ul>"
-  return accountList
-}
-// function buildInventoryList(data) { 
-//   let inventoryDisplay = document.getElementById("inventoryDisplay"); 
-//   // Set up the table labels 
-//   let dataTable = '<thead>'; 
-//   dataTable += '<tr><th>Vehicle Name</th><td>&nbsp;</td><td>&nbsp;</td></tr>'; 
-//   dataTable += '</thead>'; 
-//   // Set up the table body 
-//   dataTable += '<tbody>'; 
-//   // Iterate over all vehicles in the array and put each in a row 
-//   data.forEach(function (element) { 
-//    console.log(element.inv_id + ", " + element.inv_model); 
-//    dataTable += `<tr><td>${element.inv_make} ${element.inv_model}</td>`; 
-//    dataTable += `<td><a href='/inv/edit/${element.inv_id}' title='Click to update'>Modify</a></td>`; 
-//    dataTable += `<td><a href='/inv/delete/${element.inv_id}' title='Click to delete'>Delete</a></td></tr>`; 
-//   }) 
-//   dataTable += '</tbody>'; 
-//   // Display the contents in the Inventory Management view 
-//   inventoryDisplay.innerHTML = dataTable; 
-//  } 
+      messageData.forEach(function (message) { 
+        console.log(message.message_subject); 
+        messageTable += `<tr><td>${message.message_created.toLocaleString("en-US" )}</td>`; 
+        messageTable += `<td><a href='/account/message-reader${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`; 
+        messageTable += `<td>${message.message_from}</td>`; 
+        messageTable += `<td>${message.message_read}</td></tr>`; 
+      }) 
+      messageTable += '</table>'; 
+    } else {
+      messageTable += '<p class="notice>Sorry, no messages are found</P>'
+    }  
+    return messageTable
+ } 
 
 
 
