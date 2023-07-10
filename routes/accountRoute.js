@@ -27,6 +27,12 @@ router.get('/logout', utilities.handleErrors(accountController.logout));
 // Route to build the inbox. Final project
 router.get("/inbox", utilities.handleErrors(accountController.buildInbox));
 
+// Route to build the message reader. Final project
+router.get("/read-message/:message_id", utilities.handleErrors(accountController.buildMessageReader));
+
+// Route to build the new message view. Final project
+router.get("/new-message", utilities.handleErrors(accountController.buildNewMessage));
+
 // Functionality to enable the registration route
 router.post(
     "/register", 
@@ -58,5 +64,8 @@ router.post(
     regValidate.updatePasswordRules(),
     utilities.handleErrors(accountController.updatePassword),
 )
+
+// Process the new message final project
+router.post("/new-message", utilities.handleErrors(accountController.addNewMessage))
 
 module.exports = router;

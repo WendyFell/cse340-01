@@ -234,11 +234,9 @@ async function logout(req, res, next) {
  *  Build inbox view (final project)
  * ************************** */
 async function buildInbox (req, res, next) {
-  console.log("test1")
   const message_to =  res.locals.accountData.account_id 
-  console.log(message_to)
-  const messageData = await accountModel.getInboxData(message_to)
-  console.log(messageData)
+  let messageData = await accountModel.getInboxData(message_to)
+  // console.log(messageData)
   const messageTable = await utilities.buildInbox(messageData)
   // console.log(messageTable)
   let nav = await utilities.getNav()
@@ -250,6 +248,81 @@ async function buildInbox (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build message reader view (final project)
+ * ************************** */
+async function buildMessageReader(req, res, next) {
+  console.group("hey")
+  // const message_id = res.locals.messageData.message_id // no console log, cannot read properties of undefined (reading'message_id')
+  // const message_id = res.locals.message_id // undefined
+  const message_id =  parseInt(req.params.message_id) // NAN
+  console.log(message_id)
+  let nav = await utilities.getNav()
+  const messageData = await accountModel.getMessageById(message_id)
+  console.log(messageData)
+  res.render("account/read-message", {
+    title: "Read Message",
+    nav,
+    errors: null,
+    message_id: messageData[0].message_id,
+    message_subject: messageData[0].message_subject,
+    message_from: messageData[0].message_from,
+    message_body: messageData[0].message_body,
+    
+  })
+}  
+
+/* ***************************
+ *  Build new message view (final project)
+ * ************************** */
+async function buildNewMessage (req, res, next) {
+  let nav = await utilities.getNav()
+  let accountOptions = await utilities.getAccountOptions()
+  res.render("./account/new-message", {
+      title: "New Message",
+      nav, 
+      accountOptions,
+      errors: null,
+    })
+}
+
+/* ***************************
+ *  Process the new message (final project)
+ * ************************** */
+async function addNewMessage (req, res, next) {
+  console.log("Pew")
+  let nav = await utilities.getNav()
+  const  { message_subject, message_body, message_to, message_from } = req.body
+  const messageResult = await accountModel.newMessage(  message_subject, message_body, message_to, message_from)
+  console.log(message_to)
+  if (messageResult) {
+    req.flash(
+      "notice",
+      `Message sent`
+    )
+    let messageData = await accountModel.getInboxData(message_to)
+    // console.log(messageData)
+    const messageTable = await utilities.buildInbox(messageData)
+    res.status(201).render("./account/inbox", {
+      title: "Messages",
+      nav,
+      errors: null,
+      messageTable
+    })
+  } else {
+    req.flash("notice", "Sorry, the new message wasn't sent.")
+    const accountOptions = await utilities.getAccountOptions()
+    res.status(501).render("./account/new-message", {
+      title: "New message",
+      nav,
+      accountOptions,
+      errors: null
+    })
+  }
+}
+
+
+
 module.exports = { 
   buildLogin, 
   buildRegister, 
@@ -260,5 +333,8 @@ module.exports = {
   updateAccountInfo, 
   updatePassword, 
   logout,
-  buildInbox
+  buildInbox, 
+  buildMessageReader,
+  buildNewMessage,
+  addNewMessage
 };

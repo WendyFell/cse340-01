@@ -176,9 +176,9 @@ Util.buildInbox = async function(messageData) {
       messageTable += '</thead>'; 
       
       messageData.forEach(function (message) { 
-        console.log(message.message_subject); 
         messageTable += `<tr><td>${message.message_created.toLocaleString("en-US" )}</td>`; 
-        messageTable += `<td><a href='/account/message-reader${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`; 
+        messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`;
+        // messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`; 
         messageTable += `<td>${message.message_from}</td>`; 
         messageTable += `<td>${message.message_read}</td></tr>`; 
       }) 
@@ -189,7 +189,20 @@ Util.buildInbox = async function(messageData) {
     return messageTable
  } 
 
-
+/* **************************************
+ * Custom function that gets the names of the registered people and wraps it up in the select option tag (final project)
+ * ************************************ */
+Util.getAccountOptions = async function (optionSelected = null) {
+  let messageData = await accountModel.getAccountById() 
+  let opt = '<select name="message_to" id="messageList" class="selectItems">'
+  opt += '<option value="">Select Recipient</option>'
+  messageData.rows.forEach((row) => {
+    opt += `<option value= "${row.account_id}" ${row.account_id ===  Number(optionSelected) ? " selected " : ""} > 
+      ${row.account_firstname}</option>`
+  })
+  opt += "</select>"
+  return opt
+}
 
 /* ****************************************
  * Middleware For Handling Errors
