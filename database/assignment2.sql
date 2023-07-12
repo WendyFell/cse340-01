@@ -13,7 +13,7 @@ VALUES (
 );
 -- Change Tony Stark to Admin status
 UPDATE account
-SET account_type = "Admin"
+SET account_type = 'Admin'
 WHERE account_id = 1;
 -- Delete Tony Stark
 DELETE FROM account
