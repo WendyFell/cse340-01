@@ -99,7 +99,8 @@ async function updatePassword(account_password){
  * ************************** */
 async function getMessageById(message_id){
   try {
-  const messageData = await pool.query("SELECT * FROM public.message WHERE message_id = $1",
+  const messageData = await pool.query(
+  "SELECT m.*, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from WHERE m.message_id = $1",
   [message_id]
   )
   return messageData.rows
@@ -115,8 +116,7 @@ async function getMessageById(message_id){
 async function getInboxData(message_to) {
   try {
     const messageData = await pool.query(
-      "SELECT * FROM public.message AS i JOIN public.account AS c ON i.message_to = c.account_id WHERE i.message_to = $1",
-      // "SELECT * FROM public.message AS i JOIN public.account AS c ON c.account_id = i.message_to AND c.account_id = i.message_from WHERE i.message_to = $1 AND i.message_from = $2",
+      "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE m.message_archived = false AND m.message_to = $1",      
       [message_to]
     )    
     return messageData.rows
@@ -144,6 +144,34 @@ async function newMessage( message_subject, message_body, message_to, message_fr
   }
 }
 
+/* ***************************
+ *  Get archived messages
+ * ************************** */
+async function getArchivedData(message_to) {
+  try {
+    const archivedMessageData = await pool.query(
+      "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE m.message_archived = true AND m.message_to = $1",      
+      [message_to]
+    )    
+    return archivedMessageData.rows
+  } catch (error) {
+    console.error("getinboxbyid error " + error)
+  }
+}
+
+/* ***************************
+ *  Delete Message
+ * ************************** */
+async function deleteMessage(message_id) {
+  try {
+    const sql = "DELETE FROM public.message WHERE message_id = $1"
+    const data = await pool.query(sql, [message_id])
+    return data.rows
+  } catch (error) {
+    console.error("Delete Inventory Error")
+  }
+}
+
 module.exports = { 
   registerAccount, 
   checkExistingEmail, 
@@ -155,5 +183,7 @@ module.exports = {
   getMessageById,
   getInboxData,
   getAccountById,
-  newMessage
+  newMessage,
+  getArchivedData,
+  deleteMessage
 };

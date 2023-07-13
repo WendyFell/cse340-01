@@ -33,6 +33,9 @@ router.get("/read-message/:message_id", utilities.handleErrors(accountController
 // Route to build the new message view. Final project
 router.get("/new-message", utilities.handleErrors(accountController.buildNewMessage));
 
+// Route to build the new message view. Final project
+router.get("/archived-message", utilities.handleErrors(accountController.buildArchivedMessage));
+
 // Functionality to enable the registration route
 router.post(
     "/register", 
@@ -67,5 +70,8 @@ router.post(
 
 // Process the new message final project
 router.post("/new-message", utilities.handleErrors(accountController.addNewMessage))
+
+// Functionality to watch for and direct the incoming request to the controller for updating the inventory. Unit 5
+router.post("/delete-message", utilities.handleErrors(accountController.deleteMessage))
 
 module.exports = router;

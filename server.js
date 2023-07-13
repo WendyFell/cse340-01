@@ -71,7 +71,7 @@ app.get("/error", utilities.handleErrors(baseController.errorFunc))
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, Keep trying.'})
+  next({status: 404, message: 'Sorry, route not found.'})
 })
 
 

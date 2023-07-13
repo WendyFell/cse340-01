@@ -14,19 +14,21 @@
    </ul>
   <% } %>
 
-<!-- Generated dynamically like the vehicle view? -->
-<%=message_subject %>
-<%=message_from %>
-<%- message_body %>
-            <!-- <input type="submit" id="submitBtn" value="Return to Inbox">
-            <input type="submit" id="submitBtn" value="reply">
-            <input type="submit" id="submitBtn" value="mark as read">
-            <input type="submit" id="submitBtn" value="archive message">
-            <input type="submit" id="submitBtn" value="delete message"> -->
 
- 
-    <!-- <a class="manageItem" title="Click to create a new message" href="/account/inbox">Return to Inbox</a>
-    <a class="manageItem" title="Click to view archived messages" href="/account/message-reply">Reply to Message</a>
-    <a class="manageItem" title="Click to create a new message" href="/account/message-read">Mark as Read</a>
-    <a class="manageItem" title="Click to view archived messages" href="/account/message-archive">Archive Message</a>
-    <a class="manageItem" title="Click to view archived messages" href="/account/message-delete">Delete Message</a> -->
+<ul class="message-reader"> 
+  <li><strong>Subject:</strong> <%=message_subject %></li>
+  <li><strong>From:</strong> <%=message_from1 %> <%=message_from2 %></li>
+  <li><strong>Message:</strong> <%- message_body %></li>
+</ul> 
+
+<span>-------------------------------</span>
+<form>
+<!-- <a class="manageItem" title="Click to return to inbox" href="/account/inbox">Return to Inbox</a> -->
+<button type="submit" formaction="/account/inbox">Return to Inbox</button>
+<button type="submit" formaction="/message-reply">Reply</button>
+<button type="submit" formaction="/action_page2.php">Mark as Read</button>
+<button type="submit" formaction="/archive-message">Archive Message</button>
+<button type="submit" formaction="/account/delete-message" method="post">Delete Message</button>
+
+</form>
+

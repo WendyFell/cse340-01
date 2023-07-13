@@ -236,12 +236,14 @@ async function logout(req, res, next) {
 async function buildInbox (req, res, next) {
   const message_to =  res.locals.accountData.account_id 
   let messageData = await accountModel.getInboxData(message_to)
-  // console.log(messageData)
+  console.log(messageData)
   const messageTable = await utilities.buildInbox(messageData)
   // console.log(messageTable)
+  const firstName = messageData[0].messageto_firstname
+  const lastName = messageData[0].messageto_lastname
   let nav = await utilities.getNav()
   res.render("./account/inbox", {
-    title: "Messages" ,
+    title: `${firstName} ${lastName} Inbox` ,
     nav,
     errors: null,
     messageTable,
@@ -252,21 +254,21 @@ async function buildInbox (req, res, next) {
  *  Build message reader view (final project)
  * ************************** */
 async function buildMessageReader(req, res, next) {
-  console.group("hey")
-  // const message_id = res.locals.messageData.message_id // no console log, cannot read properties of undefined (reading'message_id')
-  // const message_id = res.locals.message_id // undefined
-  const message_id =  parseInt(req.params.message_id) // NAN
-  console.log(message_id)
+  const message_id =  parseInt(req.params.message_id)
+  // console.log(message_id)
   let nav = await utilities.getNav()
   const messageData = await accountModel.getMessageById(message_id)
+  console.log (messageData)
+  const subject = messageData[0].message_subject
   console.log(messageData)
   res.render("account/read-message", {
-    title: "Read Message",
+    title: `Message: ${subject}`,
     nav,
     errors: null,
     message_id: messageData[0].message_id,
     message_subject: messageData[0].message_subject,
-    message_from: messageData[0].message_from,
+    message_from1: messageData[0].accountfrom_firstname,
+    message_from2: messageData[0].accountfrom_lastname,
     message_body: messageData[0].message_body,
     
   })
@@ -303,8 +305,10 @@ async function addNewMessage (req, res, next) {
     let messageData = await accountModel.getInboxData(message_to)
     // console.log(messageData)
     const messageTable = await utilities.buildInbox(messageData)
+    const firstName = messageData[0].messageto_firstname
+    const lastName = messageData[0].messageto_lastname
     res.status(201).render("./account/inbox", {
-      title: "Messages",
+      title: `${firstName} ${lastName} Inbox`,
       nav,
       errors: null,
       messageTable
@@ -321,7 +325,56 @@ async function addNewMessage (req, res, next) {
   }
 }
 
+/* ***************************
+ *  Delete Message
+ * ************************** */
+async function deleteMessage (req, res, next) {
+  console.log ("super")
+  // const { message_id } = req.body
+  const message_id = req.body
+  const deleteResult = await accountModel.deleteMessage(message_id)
+  const message_to =  res.locals.accountData.account_id 
+  let messageData = await accountModel.getInboxData(message_to)
+  const firstName = messageData[0].messageto_firstname
+  const lastName = messageData[0].messageto_lastname
+  if (deleteResult) {    
+    req.flash("notice", "The message was deleted")
+    res.redirect("./account/inbox", {
+      title: `${firstName} ${lastName} Inbox`,
+      nav,
+      errors: null,
+      messageTable
+    })
+  } else {
+    req.flash("notice", "Sorry, the delete failed.")
+    res.render("./account/inbox", {
+      title: "Messages",
+      nav,
+      errors: null,
+      messageTable
+    })
+  }
+}
 
+/* ***************************
+ *  Build archived message view (final project)
+ * ************************** */
+async function buildArchivedMessage (req, res, next) {
+  console.log("yoda")
+  const message_to =  res.locals.accountData.account_id 
+  // console.log(message_to)
+  let archivedMessageData = await accountModel.getArchivedData(message_to)
+  // console.log(archivedMessageData)
+  const archivedMessageTable = await utilities.buildArchiveInbox(archivedMessageData)
+  console.log(archivedMessageTable)
+  let nav = await utilities.getNav()
+  res.render("./account/archived-message", {
+    title: `Archived Messages` ,
+    nav,
+    errors: null,
+    archivedMessageTable,
+  })
+}
 
 module.exports = { 
   buildLogin, 
@@ -336,5 +389,7 @@ module.exports = {
   buildInbox, 
   buildMessageReader,
   buildNewMessage,
-  addNewMessage
+  addNewMessage,
+  deleteMessage, 
+  buildArchivedMessage
 };

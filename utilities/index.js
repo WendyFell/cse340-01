@@ -167,6 +167,7 @@ Util.buildInbox = async function(messageData) {
    let messageTable
    if (messageData.length > 0) {
       messageTable = '<table class="messageTable">'; 
+      messageTable += '<thead>';
       messageTable += '<tr>';
       messageTable += '<th>Received</th>';
       messageTable += '<th>Subject</th>';
@@ -174,14 +175,15 @@ Util.buildInbox = async function(messageData) {
       messageTable += '<th>Read</th>';
       messageTable += '</tr>'; 
       messageTable += '</thead>'; 
-      
+      messageTable += '<tbody>';
       messageData.forEach(function (message) { 
         messageTable += `<tr><td>${message.message_created.toLocaleString("en-US" )}</td>`; 
         messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`;
         // messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`; 
-        messageTable += `<td>${message.message_from}</td>`; 
+        messageTable += `<td>${message.accountfrom_firstname}</td>`; 
         messageTable += `<td>${message.message_read}</td></tr>`; 
-      }) 
+      })
+      messageTable += '</tbody>'; 
       messageTable += '</table>'; 
     } else {
       messageTable += '<p class="notice>Sorry, no messages are found</P>'
@@ -203,6 +205,37 @@ Util.getAccountOptions = async function (optionSelected = null) {
   opt += "</select>"
   return opt
 }
+
+/* **************************************
+* Build the inbox view HTML
+* ************************************ */
+Util.buildArchiveInbox = async function(archivedMessageData) { 
+  let messageTable
+  if (archivedMessageData.length > 0) {
+     messageTable = '<table class="messageTable">'; 
+     messageTable += '<thead>';
+     messageTable += '<tr>';
+     messageTable += '<th>Received</th>';
+     messageTable += '<th>Subject</th>';
+     messageTable += '<th>From</th>';
+     messageTable += '<th>Read</th>';
+     messageTable += '</tr>'; 
+     messageTable += '</thead>'; 
+     messageTable += '<tbody>';
+     archivedMessageData.forEach(function (message) { 
+       messageTable += `<tr><td>${message.message_created.toLocaleString("en-US" )}</td>`; 
+       messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`;
+       messageTable += `<td>${message.accountfrom_firstname}</td>`; 
+       messageTable += `<td>${message.message_read}</td></tr>`; 
+     })
+     messageTable += '</tbody>'; 
+     messageTable += '</table>'; 
+   } else {
+     messageTable += '<p class="notice>Sorry, no messages are found</P>'
+   }  
+   return messageTable
+} 
+
 
 /* ****************************************
  * Middleware For Handling Errors

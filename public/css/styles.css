@@ -333,6 +333,46 @@ input:required:valid {
  
  }
 
+ /* ******* message table *********** */
+.messageTable{
+  table-layout: fixed;
+  border-collapse: collapse;  
+  margin: 10px;
+}
+.messageTable thead, tbody {
+  border: 3px solid var(--primary-color);
+}
+.messageTable th:nth-child(1) {
+  width: 30%
+}
+.messageTable th:nth-child(2) {
+  width: 40%
+}
+.messageTable th:nth-child(3) {
+  width: 22%
+}
+.messageTable th:nth-child(4) {
+  width: 8%
+}
+.messageTable th {
+  font-family: var(--font-head);
+  font-size: 20px;
+  padding: 5px;
+}
+.messageTable td {
+  font-family: var(--font-body);
+  text-align: center;
+  padding: 5px;
+}
+.messageTable a {
+  background-color: transparent;
+  text-decoration: underline;
+  text-underline-offset: .35rem;
+}
+.messageTable tr:nth-child(even) {
+  background-color: var(--primary-light);
+}
+
 /* ******************************************* */
 /* ************** Large Screen *************** */
 /* ******************************************* */

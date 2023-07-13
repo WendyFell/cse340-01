@@ -26,7 +26,7 @@ router.get("/getInventory/:classification_id", utilities.handleErrors(invControl
 // Route to edit inventory (unit 5 update inventory part 1)
 router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
 
-// Route to delete inventory (unit 5 dlete inventory)
+// Route to delete inventory (unit 5 delete inventory)
 router.get("/delete/:inv_id", utilities.handleErrors(invController.buildDeleteInventory));
 
 // Functionality to enable the addClassification route
