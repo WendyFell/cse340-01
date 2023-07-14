@@ -100,7 +100,8 @@ async function updatePassword(account_password){
 async function getMessageById(message_id){
   try {
   const messageData = await pool.query(
-  "SELECT m.*, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from WHERE m.message_id = $1",
+  // "SELECT m.*, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from WHERE m.message_id = $1",
+  "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE  m.message_id = $1",
   [message_id]
   )
   return messageData.rows
@@ -124,6 +125,22 @@ async function getInboxData(message_to) {
     console.error("getinboxbyid error " + error)
   }
 }
+
+/* ***************************
+ *  Get all messages and account first name by account_id for message_to field
+ * ************************** */
+async function getNewInboxData(message_from) {
+  try {
+    const messageData = await pool.query(
+      "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE m.message_archived = false AND m.message_from = $1",      
+      [message_from]
+    )    
+    return messageData.rows
+  } catch (error) {
+    console.error("getinboxbyid error " + error)
+  }
+}
+
 
 /* ***************************
  *  Get all account data
@@ -168,7 +185,20 @@ async function deleteMessage(message_id) {
     const data = await pool.query(sql, [message_id])
     return data.rows
   } catch (error) {
-    console.error("Delete Inventory Error")
+    console.error("Delete Message Error")
+  }
+}
+
+/* *****************************
+*   Update account information from update view (assignment 5)
+* *************************** */
+async function archiveMessage(message_id){
+  try {
+    const sql = "UPDATE public.message SET message_archived = true WHERE message_id = $1"
+    const result = await pool.query(sql, [message_id])
+    return result.rowCount
+  } catch (error) {
+    return error.message
   }
 }
 
@@ -182,8 +212,10 @@ module.exports = {
   updatePassword,
   getMessageById,
   getInboxData,
+  getNewInboxData,
   getAccountById,
   newMessage,
   getArchivedData,
-  deleteMessage
+  deleteMessage,
+  archiveMessage
 };

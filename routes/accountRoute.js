@@ -71,7 +71,10 @@ router.post(
 // Process the new message final project
 router.post("/new-message", utilities.handleErrors(accountController.addNewMessage))
 
-// Functionality to watch for and direct the incoming request to the controller for updating the inventory. Unit 5
-router.post("/delete-message", utilities.handleErrors(accountController.deleteMessage))
+// 
+router.get("/delete-message/:message_id", utilities.handleErrors(accountController.deleteMessage))
+
+// 
+router.get("/archive-message/:message_id", utilities.handleErrors(accountController.archiveMessage))
 
 module.exports = router;

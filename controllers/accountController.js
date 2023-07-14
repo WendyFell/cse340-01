@@ -234,13 +234,14 @@ async function logout(req, res, next) {
  *  Build inbox view (final project)
  * ************************** */
 async function buildInbox (req, res, next) {
+  console.log("Jump")
   const message_to =  res.locals.accountData.account_id 
   let messageData = await accountModel.getInboxData(message_to)
   console.log(messageData)
   const messageTable = await utilities.buildInbox(messageData)
   // console.log(messageTable)
-  const firstName = messageData[0].messageto_firstname
-  const lastName = messageData[0].messageto_lastname
+  const firstName = res.locals.accountData.account_firstname
+  const lastName = res.locals.accountData.account_lastname
   let nav = await utilities.getNav()
   res.render("./account/inbox", {
     title: `${firstName} ${lastName} Inbox` ,
@@ -254,13 +255,13 @@ async function buildInbox (req, res, next) {
  *  Build message reader view (final project)
  * ************************** */
 async function buildMessageReader(req, res, next) {
+  console.log("Luke")
   const message_id =  parseInt(req.params.message_id)
   // console.log(message_id)
   let nav = await utilities.getNav()
   const messageData = await accountModel.getMessageById(message_id)
   console.log (messageData)
   const subject = messageData[0].message_subject
-  console.log(messageData)
   res.render("account/read-message", {
     title: `Message: ${subject}`,
     nav,
@@ -278,6 +279,7 @@ async function buildMessageReader(req, res, next) {
  *  Build new message view (final project)
  * ************************** */
 async function buildNewMessage (req, res, next) {
+  console.log("Yellow")
   let nav = await utilities.getNav()
   let accountOptions = await utilities.getAccountOptions()
   res.render("./account/new-message", {
@@ -294,16 +296,19 @@ async function buildNewMessage (req, res, next) {
 async function addNewMessage (req, res, next) {
   console.log("Pew")
   let nav = await utilities.getNav()
-  const  { message_subject, message_body, message_to, message_from } = req.body
+  const  { message_subject, message_body,  message_from } = req.body
+  const message_to = res.locals.account_id
   const messageResult = await accountModel.newMessage(  message_subject, message_body, message_to, message_from)
-  console.log(message_to)
+  console.log(message_from)
   if (messageResult) {
     req.flash(
       "notice",
       `Message sent`
     )
-    let messageData = await accountModel.getInboxData(message_to)
-    // console.log(messageData)
+    const message_from =  res.locals.accountData.account_id
+    console.log(message_from)
+    let messageData = await accountModel.getInboxData(message_from)
+    console.log(messageData)
     const messageTable = await utilities.buildInbox(messageData)
     const firstName = messageData[0].messageto_firstname
     const lastName = messageData[0].messageto_lastname
@@ -330,16 +335,22 @@ async function addNewMessage (req, res, next) {
  * ************************** */
 async function deleteMessage (req, res, next) {
   console.log ("super")
-  // const { message_id } = req.body
-  const message_id = req.body
-  const deleteResult = await accountModel.deleteMessage(message_id)
-  const message_to =  res.locals.accountData.account_id 
-  let messageData = await accountModel.getInboxData(message_to)
-  const firstName = messageData[0].messageto_firstname
-  const lastName = messageData[0].messageto_lastname
-  if (deleteResult) {    
+  const message_id =  parseInt(req.params.message_id)
+  console.log(message_id)
+  const deleteResult = await accountModel.deleteMessage(message_id)   
+
+
+  if (deleteResult) {   
     req.flash("notice", "The message was deleted")
-    res.redirect("./account/inbox", {
+    const message_to = res.locals.accountData.account_id
+    console.log(message_to)
+    let messageData = await accountModel.getInboxData(message_to)
+    // console.log(messageData)
+    const messageTable = await utilities.buildInbox(messageData)
+    let nav = await utilities.getNav()
+    const firstName = res.locals.accountData.account_firstname
+    const lastName = res.locals.accountData.account_lastname
+    res.status(201).render("./account/inbox", {
       title: `${firstName} ${lastName} Inbox`,
       nav,
       errors: null,
@@ -347,7 +358,7 @@ async function deleteMessage (req, res, next) {
     })
   } else {
     req.flash("notice", "Sorry, the delete failed.")
-    res.render("./account/inbox", {
+    res.status(501).render("./account/inbox", {
       title: "Messages",
       nav,
       errors: null,
@@ -360,13 +371,13 @@ async function deleteMessage (req, res, next) {
  *  Build archived message view (final project)
  * ************************** */
 async function buildArchivedMessage (req, res, next) {
-  console.log("yoda")
+  // console.log("yoda")
   const message_to =  res.locals.accountData.account_id 
   // console.log(message_to)
   let archivedMessageData = await accountModel.getArchivedData(message_to)
   // console.log(archivedMessageData)
   const archivedMessageTable = await utilities.buildArchiveInbox(archivedMessageData)
-  console.log(archivedMessageTable)
+  // console.log(archivedMessageTable)
   let nav = await utilities.getNav()
   res.render("./account/archived-message", {
     title: `Archived Messages` ,
@@ -374,6 +385,43 @@ async function buildArchivedMessage (req, res, next) {
     errors: null,
     archivedMessageTable,
   })
+}
+
+/* ***************************
+ *  Archive Message (final project)
+ * ************************** */
+async function archiveMessage (req, res, next) {
+  console.log ("lemon")
+  const message_id =  parseInt(req.params.message_id)
+  console.log(message_id)
+  const archiveResult = await accountModel.archiveMessage(message_id)   
+
+
+  if (archiveResult) {   
+    req.flash("notice", "The message was archived")
+    const message_to = res.locals.accountData.account_id
+    console.log(message_to)
+    const messageData = await accountModel.getInboxData(message_to)
+    console.log(messageData)
+    const messageTable = await utilities.buildInbox(messageData)
+    let nav = await utilities.getNav()
+    const firstName = messageData[0].messageto_firstname
+    const lastName = messageData[0].messageto_lastname
+    res.status (201).render("./account/inbox", {
+      title: `${firstName} ${lastName} Inbox`,
+      nav,
+      errors: null,
+      messageTable
+    })
+  } else {
+    req.flash("notice", "Sorry, the delete failed.")
+    res.status(501).render("./account/inbox", {
+      title: "Messages",
+      nav,
+      errors: null,
+      messageTable
+    })
+  }
 }
 
 module.exports = { 
@@ -391,5 +439,6 @@ module.exports = {
   buildNewMessage,
   addNewMessage,
   deleteMessage, 
-  buildArchivedMessage
+  buildArchivedMessage,
+  archiveMessage
 };

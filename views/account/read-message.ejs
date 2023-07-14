@@ -28,7 +28,10 @@
 <button type="submit" formaction="/message-reply">Reply</button>
 <button type="submit" formaction="/action_page2.php">Mark as Read</button>
 <button type="submit" formaction="/archive-message">Archive Message</button>
-<button type="submit" formaction="/account/delete-message" method="post">Delete Message</button>
+<button type="submit" formaction="/account/delete-message/<%- locals.message_id  %>" formmethod="get">Delete Message</button>
+<a class="messageInbox" title="Click to view inbox" href="/account/archive-message/<%- locals.message_id  %>">Archive Message</a>
+<a class="messageInbox" title="Click to view inbox" href="/account/inbox/">Return to Inbox</a>
+<a class="messageInbox" title="Click to view inbox" href="/account/delete-message/<%- locals.message_id  %>">Delete Message</a>
+
 
 </form>
-
