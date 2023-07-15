@@ -31,6 +31,9 @@ body {
 h1, h2 {
   font-family: var(--font-head);
 }
+h3 {
+  font-family: var(--font-body);
+}
 p {
   font-family: var(--font-body);
 }
@@ -305,7 +308,7 @@ input:required:valid {
   align-items: center;
   padding: 5px;
   margin: 5px;
-  width: 50%;
+  width: 40%;
   background-color: var(--secondary-color);
   outline: 1px solid var(--dark-color);
 }
@@ -330,8 +333,20 @@ input:required:valid {
   color: var(--dark-color);
   background-color: var(--primary-light);
   padding: 2px;
- 
  }
+ .messageCenter {
+  margin-left: 20px;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+}
+.messageCenter a {
+  margin-left: 0px;
+  color: var(--dark-color);
+}
+.messageCenter a:hover {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
 
  /* ******* message table *********** */
 .messageTable{
@@ -371,6 +386,33 @@ input:required:valid {
 }
 .messageTable tr:nth-child(even) {
   background-color: var(--primary-light);
+}
+ 
+/* ******* message reader *********** */
+.message-reader {
+  font-family: var(--font-body);
+  margin-left: 10px;
+  list-style-type: none;
+  padding: 10px;
+  border: 3px solid var(--primary-color);
+  width: 40%;
+}
+
+.messageInbox {
+  text-decoration: none;
+  color: var(--dark-color);
+  display: flex;
+  flex-direction: row;
+  font-family: var(--font-body);
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 5px;
+  margin-left: 10px;
+  width:20%;
+  background-color: var(--primary-light);
+  outline: 1px solid var(--dark-color);
 }
 
 /* ******************************************* */

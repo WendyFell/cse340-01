@@ -33,6 +33,17 @@ async function buildRegister(req, res, next) {
 * *************************************** */
 async function buildManagement(req, res, next) {
   let nav = await utilities.getNav()
+  const account_id =  res.locals.accountData.account_id 
+  
+  let messageData = await accountModel.getAllReadMessages(account_id)
+  let unread = 0
+  messageData.forEach(message => {
+    if (!message.message_read){
+      unread += 1
+    }
+  })
+  res.locals.unread = unread
+
   res.render("account/account-management", {
     title: "Account Management",
     nav,
@@ -78,14 +89,12 @@ async function registerAccount(req, res) {
       errors: null,
     })
   }
-
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
     account_email,
     hashedPassword
   )
-
   if (regResult) {
     req.flash(
       "notice",
@@ -112,7 +121,7 @@ async function accountLogin(req, res) {
   let nav = await utilities.getNav()
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
-  console.log(accountData)
+  // console.log(accountData)
   if (!accountData) {
    req.flash("notice", "Please check your credentials and try again.")
    res.status(400).render("account/login", {
@@ -151,7 +160,6 @@ async function updateAccountInfo(req, res) {
     account_email,
     account_id,
   )
-  console.log(infoChangeResult)
   const accountById = await accountModel.getAccountById(account_id)
   res.locals.accountData = accountById
 
@@ -160,11 +168,7 @@ async function updateAccountInfo(req, res) {
     const accountData = await accountModel.getAccountById(account_id)
     accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
     res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-    
-    req.flash(
-      "notice",
-      `${account_firstname}, your information was changed.`
-    )
+    req.flash("notice", `${account_firstname}, your information was changed.`)
     res.status(201).render("account/account-management", {
       title: "Manage Account",
       nav,
@@ -203,11 +207,8 @@ async function updatePassword(req, res) {
   const passChangeResult = await accountModel.updatePassword( 
     hashedPassword
   )
-  if (passChangeResultResult) {
-    req.flash(
-      "notice",
-      `${account_firstname}, your password changed.`
-    )
+  if (passChangeResult) {
+    req.flash("notice", `${account_firstname}, your password changed.`)
     res.status(201).render("account/update", {
       title: "Manage Account",
       nav,
@@ -234,15 +235,28 @@ async function logout(req, res, next) {
  *  Build inbox view (final project)
  * ************************** */
 async function buildInbox (req, res, next) {
-  console.log("Jump")
+  // console.log("Jump")
   const message_to =  res.locals.accountData.account_id 
   let messageData = await accountModel.getInboxData(message_to)
-  console.log(messageData)
+  // console.log(messageData)
   const messageTable = await utilities.buildInbox(messageData)
   // console.log(messageTable)
   const firstName = res.locals.accountData.account_firstname
   const lastName = res.locals.accountData.account_lastname
   let nav = await utilities.getNav()
+
+  
+  let archivedMessageData = await accountModel.getArchivedData(message_to)
+  console.log(archivedMessageData)
+  let archived = 0
+  archivedMessageData.forEach(message => {
+    if (message.message_archived){
+      archived += 1
+    }
+  })
+  res.locals.archived = archived
+  console.log(archived)
+
   res.render("./account/inbox", {
     title: `${firstName} ${lastName} Inbox` ,
     nav,
@@ -255,12 +269,12 @@ async function buildInbox (req, res, next) {
  *  Build message reader view (final project)
  * ************************** */
 async function buildMessageReader(req, res, next) {
-  console.log("Luke")
+  // console.log("Luke")
   const message_id =  parseInt(req.params.message_id)
   // console.log(message_id)
   let nav = await utilities.getNav()
   const messageData = await accountModel.getMessageById(message_id)
-  console.log (messageData)
+  // console.log (messageData)
   const subject = messageData[0].message_subject
   res.render("account/read-message", {
     title: `Message: ${subject}`,
@@ -271,7 +285,6 @@ async function buildMessageReader(req, res, next) {
     message_from1: messageData[0].accountfrom_firstname,
     message_from2: messageData[0].accountfrom_lastname,
     message_body: messageData[0].message_body,
-    
   })
 }  
 
@@ -279,7 +292,7 @@ async function buildMessageReader(req, res, next) {
  *  Build new message view (final project)
  * ************************** */
 async function buildNewMessage (req, res, next) {
-  console.log("Yellow")
+  // console.log("Yellow")
   let nav = await utilities.getNav()
   let accountOptions = await utilities.getAccountOptions()
   res.render("./account/new-message", {
@@ -294,24 +307,19 @@ async function buildNewMessage (req, res, next) {
  *  Process the new message (final project)
  * ************************** */
 async function addNewMessage (req, res, next) {
-  console.log("Pew")
-  let nav = await utilities.getNav()
-  const  { message_subject, message_body,  message_from } = req.body
-  const message_to = res.locals.account_id
+  // console.log("Pew")
+  let nav = await utilities.getNav()  
+  const  { message_subject, message_body, message_to, message_from } = req.body
   const messageResult = await accountModel.newMessage(  message_subject, message_body, message_to, message_from)
-  console.log(message_from)
+    
+  let messageData = await accountModel.getInboxData(message_from)
+  // console.log(messageData)
+  const messageTable = await utilities.buildInbox(messageData)
+  const firstName = res.locals.accountData.account_firstname
+  const lastName = res.locals.accountData.account_lastname
+
   if (messageResult) {
-    req.flash(
-      "notice",
-      `Message sent`
-    )
-    const message_from =  res.locals.accountData.account_id
-    console.log(message_from)
-    let messageData = await accountModel.getInboxData(message_from)
-    console.log(messageData)
-    const messageTable = await utilities.buildInbox(messageData)
-    const firstName = messageData[0].messageto_firstname
-    const lastName = messageData[0].messageto_lastname
+    req.flash("notice", `Message sent`)    
     res.status(201).render("./account/inbox", {
       title: `${firstName} ${lastName} Inbox`,
       nav,
@@ -334,22 +342,22 @@ async function addNewMessage (req, res, next) {
  *  Delete Message
  * ************************** */
 async function deleteMessage (req, res, next) {
-  console.log ("super")
+  // console.log ("super")
   const message_id =  parseInt(req.params.message_id)
-  console.log(message_id)
-  const deleteResult = await accountModel.deleteMessage(message_id)   
-
-
+  // console.log(message_id)
+  const deleteResult = await accountModel.deleteMessage(message_id) 
+  
+  const message_to = res.locals.accountData.account_id
+  // console.log(message_to)
+  let messageData = await accountModel.getInboxData(message_to)
+  // console.log(messageData)
+  const messageTable = await utilities.buildInbox(messageData)
+  let nav = await utilities.getNav()
+  const firstName = res.locals.accountData.account_firstname
+  const lastName = res.locals.accountData.account_lastname
+  
   if (deleteResult) {   
     req.flash("notice", "The message was deleted")
-    const message_to = res.locals.accountData.account_id
-    console.log(message_to)
-    let messageData = await accountModel.getInboxData(message_to)
-    // console.log(messageData)
-    const messageTable = await utilities.buildInbox(messageData)
-    let nav = await utilities.getNav()
-    const firstName = res.locals.accountData.account_firstname
-    const lastName = res.locals.accountData.account_lastname
     res.status(201).render("./account/inbox", {
       title: `${firstName} ${lastName} Inbox`,
       nav,
@@ -359,7 +367,7 @@ async function deleteMessage (req, res, next) {
   } else {
     req.flash("notice", "Sorry, the delete failed.")
     res.status(501).render("./account/inbox", {
-      title: "Messages",
+      title: `${firstName} ${lastName} Inbox`,
       nav,
       errors: null,
       messageTable
@@ -378,6 +386,7 @@ async function buildArchivedMessage (req, res, next) {
   // console.log(archivedMessageData)
   const archivedMessageTable = await utilities.buildArchiveInbox(archivedMessageData)
   // console.log(archivedMessageTable)
+
   let nav = await utilities.getNav()
   res.render("./account/archived-message", {
     title: `Archived Messages` ,
@@ -391,22 +400,22 @@ async function buildArchivedMessage (req, res, next) {
  *  Archive Message (final project)
  * ************************** */
 async function archiveMessage (req, res, next) {
-  console.log ("lemon")
+  // console.log ("lemon")
   const message_id =  parseInt(req.params.message_id)
-  console.log(message_id)
+  // console.log(message_id)
   const archiveResult = await accountModel.archiveMessage(message_id)   
 
+  const message_to = res.locals.accountData.account_id
+  // console.log(message_to)
+  const messageData = await accountModel.getInboxData(message_to)
+  // console.log(messageData)
+  const messageTable = await utilities.buildInbox(messageData)
+  let nav = await utilities.getNav()
+  const firstName = res.locals.accountData.account_firstname
+  const lastName = res.locals.accountData.account_lastname
 
   if (archiveResult) {   
     req.flash("notice", "The message was archived")
-    const message_to = res.locals.accountData.account_id
-    console.log(message_to)
-    const messageData = await accountModel.getInboxData(message_to)
-    console.log(messageData)
-    const messageTable = await utilities.buildInbox(messageData)
-    let nav = await utilities.getNav()
-    const firstName = messageData[0].messageto_firstname
-    const lastName = messageData[0].messageto_lastname
     res.status (201).render("./account/inbox", {
       title: `${firstName} ${lastName} Inbox`,
       nav,
@@ -416,13 +425,78 @@ async function archiveMessage (req, res, next) {
   } else {
     req.flash("notice", "Sorry, the delete failed.")
     res.status(501).render("./account/inbox", {
-      title: "Messages",
+      title: `${firstName} ${lastName} Inbox`,
       nav,
       errors: null,
       messageTable
     })
   }
 }
+
+/* ***************************
+ *  Mark message as read (final project)
+ * ************************** */
+async function markReadMessage (req, res, next) {
+  console.log ("orange")
+  const message_id =  parseInt(req.params.message_id)
+  // console.log(message_id)
+  const archiveResult = await accountModel.markMessageRead(message_id)   
+
+  const message_to = res.locals.accountData.account_id
+  // console.log(message_to)
+  const messageData = await accountModel.getInboxData(message_to)
+  // console.log(messageData)
+  const messageTable = await utilities.buildInbox(messageData)
+  let nav = await utilities.getNav()
+  const firstName = res.locals.accountData.account_firstname
+  const lastName = res.locals.accountData.account_lastname
+
+  if (archiveResult) {   
+    req.flash("notice", "The message was marked as read")
+    res.status (201).render("./account/inbox", {
+      title: `${firstName} ${lastName} Inbox`,
+      nav,
+      errors: null,
+      messageTable
+    })
+  } else {
+    req.flash("notice", "Sorry, the delete failed.")
+    res.status(501).render("./account/inbox", {
+      title: `${firstName} ${lastName} Inbox`,
+      nav,
+      errors: null,
+      messageTable
+    })
+  }
+}
+
+/* ***************************
+ *  Mark message as read (final project)
+ * ************************** */
+async function buildReplyMessage (req, res, next) {
+  console.log("Dragon")
+  let nav = await utilities.getNav() 
+  let accountOptions = await utilities.getAccountOptions()
+
+  // const message_id =  parseInt(req.params.message_id)
+  // console.log(message_id)
+  // const messageData = await accountModel.getMessageById(message_id)
+  // console.log (messageData)
+
+  res.render("./account/message-reply", {
+      title: "Reply Message",
+      nav, 
+      accountOptions,
+      // message_id: messageData[0].message_id,
+      // message_subject: messageData[0].message_subject,
+      // message_from1: messageData[0].accountfrom_firstname,
+      // message_from2: messageData[0].accountfrom_lastname,
+      // message_body: messageData[0].message_body,
+      errors: null,
+    })
+}
+
+
 
 module.exports = { 
   buildLogin, 
@@ -440,5 +514,7 @@ module.exports = {
   addNewMessage,
   deleteMessage, 
   buildArchivedMessage,
-  archiveMessage
+  archiveMessage,
+  markReadMessage,
+  buildReplyMessage
 };

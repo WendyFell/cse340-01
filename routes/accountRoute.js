@@ -36,6 +36,18 @@ router.get("/new-message", utilities.handleErrors(accountController.buildNewMess
 // Route to build the new message view. Final project
 router.get("/archived-message", utilities.handleErrors(accountController.buildArchivedMessage));
 
+// Route to process deleting the message
+router.get("/delete-message/:message_id", utilities.handleErrors(accountController.deleteMessage))
+
+// Route to archive the message
+router.get("/archive-message/:message_id", utilities.handleErrors(accountController.archiveMessage))
+
+// Route to mark the message as read
+router.get("/mark-read/:message_id", utilities.handleErrors(accountController.markReadMessage))
+
+// Route to build the reply view. Final project
+router.get("/message-reply/:message_id", utilities.handleErrors(accountController.buildReplyMessage));
+
 // Functionality to enable the registration route
 router.post(
     "/register", 
@@ -58,23 +70,28 @@ router.post(
     "/updateAccount",
     regValidate.updateAccountRules(),
     regValidate.checkAccountData,
-    utilities.handleErrors(accountController.updateAccountInfo),
+    utilities.handleErrors(accountController.updateAccountInfo)
 )
 
 // Process the update attempt assignment 5
 router.post(
     "/updatePassword",
     regValidate.updatePasswordRules(),
-    utilities.handleErrors(accountController.updatePassword),
+    utilities.handleErrors(accountController.updatePassword)
 )
 
 // Process the new message final project
-router.post("/new-message", utilities.handleErrors(accountController.addNewMessage))
+router.post("/new-message", 
+    regValidate.newMessageRules(),
+    regValidate.checkNewMessageData,
+    utilities.handleErrors(accountController.addNewMessage)
+)
 
-// 
-router.get("/delete-message/:message_id", utilities.handleErrors(accountController.deleteMessage))
-
-// 
-router.get("/archive-message/:message_id", utilities.handleErrors(accountController.archiveMessage))
+// Process the new message final project
+router.post("/message-reply", 
+    regValidate.newMessageRules(),
+    regValidate.checkNewMessageData,
+    utilities.handleErrors(accountController.addNewMessage)
+)
 
 module.exports = router;

@@ -80,6 +80,13 @@ async function getAccountById (account_id) {
   }
 }
 
+/* ***************************
+ *  Get all account data
+ * ************************** */
+// async function getAccountById(){
+//   return await pool.query("SELECT * FROM public.account ORDER BY account_id")
+// }
+
 /* *****************************
 *   Update password information from update view (assignment 5)
 * *************************** */
@@ -95,12 +102,26 @@ async function updatePassword(account_password){
 }
 
 /* ***************************
- *  Get all account data
+ *  Returning all message data, account first and last name of message to and message from with specific message id
+ * ************************** */
+async function getAllReadMessages(account_id){
+  try {
+  const messageData = await pool.query(
+  "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE m.message_read = false AND m.message_to = $1",
+  [account_id]
+  )
+  return messageData.rows
+} catch (error){
+  console.error("messagebyid"+error)
+}
+}
+
+/* ***************************
+ *  Get one message. Returning all message data, account first and last name of message to and message from with specific message id
  * ************************** */
 async function getMessageById(message_id){
   try {
   const messageData = await pool.query(
-  // "SELECT m.*, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from WHERE m.message_id = $1",
   "SELECT m.*, a1.account_firstname AS messageTo_firstname, a1.account_lastname AS messageTo_lastname, a2.account_firstname AS accountFrom_firstname, a2.account_lastname AS accountFrom_lastname FROM message m JOIN account a2 ON a2.account_id = m.message_from JOIN account a1 ON a1.account_id = m.message_to WHERE  m.message_id = $1",
   [message_id]
   )
@@ -110,9 +131,8 @@ async function getMessageById(message_id){
 }
 }
 
-
 /* ***************************
- *  Get all messages and account first name by account_id for message_to field
+ *  Get all messages and account first name and last name by account_id by message_to identifier, excluding message archived
  * ************************** */
 async function getInboxData(message_to) {
   try {
@@ -127,7 +147,7 @@ async function getInboxData(message_to) {
 }
 
 /* ***************************
- *  Get all messages and account first name by account_id for message_to field
+ *  Get all messages and account first name and last name by account_id by message_from identifier, excluding message archived
  * ************************** */
 async function getNewInboxData(message_from) {
   try {
@@ -139,14 +159,6 @@ async function getNewInboxData(message_from) {
   } catch (error) {
     console.error("getinboxbyid error " + error)
   }
-}
-
-
-/* ***************************
- *  Get all account data
- * ************************** */
-async function getAccountById(){
-  return await pool.query("SELECT * FROM public.account ORDER BY account_id")
 }
 
 /* ***************************
@@ -162,7 +174,7 @@ async function newMessage( message_subject, message_body, message_to, message_fr
 }
 
 /* ***************************
- *  Get archived messages
+ *  Get archived messages final project
  * ************************** */
 async function getArchivedData(message_to) {
   try {
@@ -177,7 +189,7 @@ async function getArchivedData(message_to) {
 }
 
 /* ***************************
- *  Delete Message
+ *  Delete Message final project
  * ************************** */
 async function deleteMessage(message_id) {
   try {
@@ -190,11 +202,24 @@ async function deleteMessage(message_id) {
 }
 
 /* *****************************
-*   Update account information from update view (assignment 5)
+*   Archive Message final project
 * *************************** */
 async function archiveMessage(message_id){
   try {
     const sql = "UPDATE public.message SET message_archived = true WHERE message_id = $1"
+    const result = await pool.query(sql, [message_id])
+    return result.rowCount
+  } catch (error) {
+    return error.message
+  }
+}
+
+/* *****************************
+*   Message Read final project
+* *************************** */
+async function markMessageRead(message_id){
+  try {
+    const sql = "UPDATE public.message SET message_read = true WHERE message_id = $1"
     const result = await pool.query(sql, [message_id])
     return result.rowCount
   } catch (error) {
@@ -209,13 +234,15 @@ module.exports = {
   getAccountByEmail, 
   updateAccountInfo,
   getAccountById,
+  getAccountById,
   updatePassword,
+  getAllReadMessages,
   getMessageById,
   getInboxData,
   getNewInboxData,
-  getAccountById,
   newMessage,
   getArchivedData,
   deleteMessage,
-  archiveMessage
+  archiveMessage,
+  markMessageRead
 };

@@ -179,7 +179,6 @@ Util.buildInbox = async function(messageData) {
       messageData.forEach(function (message) { 
         messageTable += `<tr><td>${message.message_created.toLocaleString("en-US" )}</td>`; 
         messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`;
-        // messageTable += `<td><a href='/account/read-message/${message.message_id}' title='Click to open message'>${message.message_subject}</a></td>`; 
         messageTable += `<td>${message.accountfrom_firstname}</td>`; 
         messageTable += `<td>${message.message_read}</td></tr>`; 
       })

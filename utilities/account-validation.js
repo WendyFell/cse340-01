@@ -206,5 +206,43 @@ validate.checkAccountData = async (req, res, next) => {
   next()
 }
 
+/*  **********************************
+ *  New message Data Validation Rules
+ * ********************************* */
+validate.newMessageRules = () => {
+  return [
+    body("message_subject")
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a first name."), 
+    body("message_body")
+      .trim()
+      .isLength({ min: 1 })
+      .withMessage("Please provide a first name."),
+  ]
+}
+/* ******************************
+ * Check data and return errors or continue to new message
+ * ***************************** */
+validate.checkNewMessageData = async (req, res, next) => {
+  const { message_subject, message_body, account_id } = req.body
+  let errors = []
+  errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    let accountOptions = await utilities.getAccountOptions()
+    res.render("account/new-message", {
+      errors,
+      title: "Manage Account",
+      nav,
+      accountOptions,
+      message_subject,
+      message_body,
+      account_id,
+    })
+    return
+  }
+  next()
+}
   
   module.exports = validate

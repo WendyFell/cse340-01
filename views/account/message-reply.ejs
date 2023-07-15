@@ -15,3 +15,32 @@
   <% } %>
 
 <!-- I need to see old message and new message here... -->
+<div class="form">
+  <form class="messageForm" id="messageForm" action="/account/message-reply" method="post">
+             
+      <p>All fields must be filled out.</p>
+      <label for="message_to">To</label> 
+      <%- accountOptions %>
+
+      <label for="message_subject">Subject</label>
+      <input type="text" id="message_subject" placeholder="" name="message_subject"  value="<%=locals.message_subject %>" required>
+      
+      <label for="message_body">Content</label>
+      <textarea id="message_body" placeholder="" name="message_body"  rows="5" cols="33"  required><%- locals.message_body %></textarea>
+      <input type="hidden" name="message_from"
+          <% if(locals.accountData) { %>  value="<%= locals.accountData.account_id %>"
+          <% } %>>
+
+      <!-- <button id="loginBtn" type="submit">Register</button> -->
+      <input type="submit" id="submitBtn" value="send message"> 
+  </form>
+
+  <!-- Same as message reader? -->
+  <!-- <ul class="message-reader"> 
+    <li><strong>Subject:</strong> </li>
+    <li><strong>From:</strong> </li>
+    <li><strong>Message:</strong> <</li>
+  </ul>  -->
+  
+  
+</div>
